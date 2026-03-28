@@ -1,0 +1,177 @@
+import { useEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { motion } from 'framer-motion';
+
+gsap.registerPlugin(ScrollTrigger);
+
+interface HeroProps {
+  frameCount: number;
+}
+
+export const Hero = ({ frameCount }: HeroProps) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const textRef = useRef<HTMLDivElement>(null);
+  const [images, setImages] = useState<(HTMLImageElement | null)[]>([]);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    const CRITICAL_FRAMES = Math.min(15, frameCount);
+    let criticalLoaded = 0;
+    const imgArray: (HTMLImageElement | null)[] = new Array(frameCount).fill(null);
+
+    for (let i = 1; i <= frameCount; i++) {
+        const img = new Image();
+        img.src = `/imagens/frame (${i}).webp`;
+        
+        img.onload = () => {
+          imgArray[i-1] = img;
+          
+          if (i <= CRITICAL_FRAMES) {
+            criticalLoaded++;
+            if (criticalLoaded === CRITICAL_FRAMES) setLoaded(true);
+          }
+        };
+        
+        img.onerror = () => {
+          imgArray[i-1] = null;
+          if (i <= CRITICAL_FRAMES) {
+            criticalLoaded++;
+            if (criticalLoaded === CRITICAL_FRAMES) setLoaded(true);
+          }
+        };
+    }
+    setImages(imgArray);
+  }, [frameCount]);
+
+  useEffect(() => {
+    if (!loaded || !canvasRef.current || !containerRef.current) return;
+
+    const canvas = canvasRef.current;
+    const context = canvas.getContext('2d');
+    if (!context) return;
+
+    const dpr = window.devicePixelRatio || 1;
+    let rect = canvas.parentElement!.getBoundingClientRect();
+
+    const playhead = { frame: 0 };
+
+    const renderFrame = (index: number) => {
+      let img = images[index];
+      let currentIndex = index;
+      
+      while (!img && currentIndex >= 0) {
+        currentIndex--;
+        img = images[currentIndex];
+      }
+      
+      if (!img) return;
+      
+      const scale = Math.max(rect.width / img.width, rect.height / img.height);
+      
+      const isMobile = window.innerWidth < 768;
+      let x;
+      
+      if (isMobile) {
+        x = rect.width - (img.width * scale);
+      } else {
+        x = (rect.width / 2) - (img.width / 2) * scale;
+      }
+      
+      const y = (rect.height / 2) - (img.height / 2) * scale;
+
+      context.clearRect(0, 0, rect.width, rect.height);
+      context.drawImage(img, x, y, img.width * scale, img.height * scale);
+    };
+
+    const updateCanvasSize = () => {
+      rect = canvas.parentElement!.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      canvas.style.width = `${rect.width}px`;
+      canvas.style.height = `${rect.height}px`;
+      context.scale(dpr, dpr);
+      renderFrame(Math.round(playhead.frame));
+    };
+    updateCanvasSize();
+    window.addEventListener('resize', updateCanvasSize);
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: containerRef.current,
+        start: "top top",
+        end: "+=220%",
+        pin: true,
+        scrub: 0.8,
+        anticipatePin: 1
+      }
+    });
+
+    tl.to(playhead, {
+      frame: frameCount - 1,
+      snap: "frame",
+      ease: "none",
+      onUpdate: () => renderFrame(Math.round(playhead.frame))
+    }, 0);
+
+    tl.to(textRef.current, { 
+      opacity: 0, 
+      y: window.innerWidth < 768 ? -80 : -120, 
+      filter: "blur(10px)",
+      ease: "power2.in" 
+    }, 0.4);
+
+
+    return () => {
+      window.removeEventListener('resize', updateCanvasSize);
+      tl.kill();
+    };
+  }, [loaded, images, frameCount]);
+
+  return (
+    <section ref={containerRef} className="relative w-full h-dvh overflow-hidden bg-florenzi-bg flex items-center">
+      
+      <div className="absolute inset-0 w-full h-full z-0 pointer-events-none overflow-hidden">
+        {!loaded && (
+          <div className="absolute inset-0 flex items-center justify-center bg-florenzi-bg">
+            <span className="text-[10px] tracking-[0.5em] uppercase opacity-30 animate-pulse font-sans font-medium">...</span>
+          </div>
+        )}
+        <canvas ref={canvasRef} className="block w-full h-full object-cover" />
+      </div>
+
+      <div className="absolute inset-0 z-1 bg-linear-to-b md:bg-linear-to-r from-florenzi-bg/95 via-florenzi-bg/50 to-transparent pointer-events-none" />
+
+      <div ref={textRef} className="relative z-10 w-full h-full px-6 md:px-16 lg:px-32 xl:px-[5vw] flex flex-col justify-center items-start pt-24 md:pt-0 xl:pt-[20vh]">
+        <motion.div 
+          initial={{ y: 40, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 1.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          className="max-w-4xl"
+        >
+          <span className="block font-sans text-xs md:text-base lg:text-lg xl:text-2xl uppercase tracking-[0.5em] font-medium text-florenzi-text/50 mb-8 md:mb-12 xl:mb-16 ml-1">
+            Florenzi quem prova, volta!
+          </span>
+          <h1 className="font-serif text-5xl md:text-7xl lg:text-[9rem] xl:text-[9vw] leading-[0.85] text-florenzi-text tracking-tighter font-medium">
+            L'Arte del <br/>
+            <span className="italic font-light sm:pl-16 xl:pl-32">Gelato Vero</span>
+          </h1>
+          
+          <div className="mt-10 md:mt-16 flex flex-col items-start gap-8">
+            <p className="font-sans text-xs md:text-lg lg:text-2xl xl:text-4xl text-florenzi-text/70 max-w-xs md:max-w-xl lg:max-w-2xl xl:max-w-4xl leading-relaxed">
+              Feito às mãos. Comido devagar.
+            </p>
+            
+            <motion.div 
+              initial={{ width: 0 }}
+              animate={{ width: "4rem" }}
+              transition={{ duration: 2, delay: 1, ease: "easeInOut" }}
+              className="h-px bg-florenzi-text/30"
+            />
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+};
