@@ -13,8 +13,8 @@ function App() {
       <main className="bg-florenzi-bg min-h-screen text-florenzi-text selection:bg-florenzi-accent selection:text-white">
         <Navbar />
         <Hero frameCount={63} />
-        <LArte />
         <Equilibrio />
+        <LArte />
         <Experiencia />
         <Footer />
       </main>
