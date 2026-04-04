@@ -1,39 +1,117 @@
+import { motion } from 'framer-motion';
+
 export const Equilibrio = () => {
   return (
-    <section className="relative w-full py-48 bg-florenzi-text text-florenzi-accent flex flex-col items-center justify-center">
-      <div className="w-full max-w-4xl px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-24">
-        
-        <div className="flex flex-col items-center text-center">
-          <span className="font-sans text-[10px] uppercase tracking-[0.4em] opacity-50 mb-8 border-b border-florenzi-accent/20 pb-4">
-            Energia
-          </span>
-          <h2 className="font-serif text-4xl md:text-6xl italic tracking-tight mb-6">
-            Cafés de<br/> Origem
-          </h2>
-          <p className="font-sans text-sm max-w-xs opacity-70 leading-relaxed font-light">
-            Micro-lotes torrados artesanalmente. Notas complexas que complementam a doçura gelada.
-          </p>
-        </div>
-
-        <div className="hidden md:block w-px h-64 bg-florenzi-accent/10" />
-
-        <div className="flex flex-col items-center text-center">
-          <span className="font-sans text-[10px] uppercase tracking-[0.4em] opacity-50 mb-8 border-b border-florenzi-accent/20 pb-4">
-            Natureza
-          </span>
-          <h2 className="font-serif text-4xl md:text-6xl italic tracking-tight mb-6">
-            Açaí<br/> Puro
-          </h2>
-          <p className="font-sans text-sm max-w-xs opacity-70 leading-relaxed font-light">
-            Batido na hora, livre de xaropes artificiais. Apenas a polpa da fruta em sua essência.
-          </p>
-        </div>
-
+    <section id="equilibrio" className="relative w-full py-48 bg-florenzi-text text-florenzi-accent">
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute -top-48 left-1/2 -translate-x-1/2 w-[36rem] h-[36rem] rounded-full bg-florenzi-accent/15 blur-[140px]" />
       </div>
 
-      <a href="#menu" className="mt-32 px-12 py-4 border border-florenzi-accent/20 rounded-full font-sans text-xs uppercase tracking-widest hover:bg-florenzi-accent hover:text-florenzi-text transition-all duration-500">
-        Descobrir Menu Completo
-      </a>
+      <div className="relative w-full max-w-7xl mx-auto px-6 md:px-12 flex flex-col items-center">
+        <div className="text-center max-w-2xl">
+          <span className="font-sans text-[10px] uppercase tracking-[0.4em] opacity-60 mb-6 inline-block">
+            Equilíbrio
+          </span>
+          <h2 className="font-serif text-4xl md:text-6xl italic tracking-tight">
+            Energia & Natureza
+          </h2>
+        </div>
+
+        <div className="relative mt-16 w-full max-w-5xl">
+          <svg
+            viewBox="0 0 1000 260"
+            className="hidden md:block absolute inset-x-0 top-1/2 -translate-y-1/2 z-0 opacity-40"
+            aria-hidden
+          >
+            <motion.path
+              d="M 40 160 C 260 20, 480 260, 960 120"
+              fill="none"
+              stroke="currentColor"
+              className="text-florenzi-accent/30"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              initial={{ pathLength: 0 }}
+              whileInView={{ pathLength: 1 }}
+              viewport={{ once: true, amount: 0.5 }}
+              transition={{ duration: 1.6, ease: 'easeInOut' }}
+            />
+          </svg>
+        </div>
+
+        <div className="relative mt-6 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 w-full max-w-5xl" role="list" aria-label="Eixos de equilíbrio Florenzi">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
+            className="group relative -mt-6 md:-mt-8 rounded-3xl border border-florenzi-accent/15 bg-florenzi-accent/5 p-8 md:p-10 backdrop-blur-sm z-10"
+            role="listitem"
+          >
+            <div className="absolute -top-3 left-8 px-3 py-1 rounded-full border border-florenzi-accent/30 bg-florenzi-text text-[10px] font-sans uppercase tracking-[0.3em]">
+              F.
+            </div>
+            <div className="flex items-center gap-4 mb-6">
+              <img
+                src="/images/menu/cafes.png"
+                alt="Cafés de Origem"
+                className="w-10 h-10 rounded-full object-contain object-center ring-1 ring-florenzi-accent/20"
+                loading="lazy"
+                decoding="async"
+              />
+              <span className="font-sans text-[10px] uppercase tracking-[0.35em] opacity-70">
+                Energia
+              </span>
+            </div>
+            <h3 className="font-serif text-3xl md:text-4xl italic mb-4">
+              Cafés de Origem
+            </h3>
+            <p className="font-sans text-sm md:text-base opacity-80 leading-relaxed font-light max-w-md">
+              Micro-lotes torrados artesanalmente. Notas complexas que complementam a doçura gelada.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
+            className="group relative md:mt-8 rounded-3xl border border-florenzi-accent/15 bg-florenzi-accent/5 p-8 md:p-10 backdrop-blur-sm z-10"
+            role="listitem"
+          >
+            <div className="absolute -top-3 left-8 px-3 py-1 rounded-full border border-florenzi-accent/30 bg-florenzi-text text-[10px] font-sans uppercase tracking-[0.3em]">
+              F.
+            </div>
+            <div className="flex items-center gap-4 mb-6">
+              <img
+                src="/images/menu/acai.png"
+                alt="Açaí Puro"
+                className="w-10 h-10 rounded-full object-contain object-center ring-1 ring-florenzi-accent/20"
+                loading="lazy"
+                decoding="async"
+              />
+              <span className="font-sans text-[10px] uppercase tracking-[0.35em] opacity-70">
+                Natureza
+              </span>
+            </div>
+            <h3 className="font-serif text-3xl md:text-4xl italic mb-4">
+              Açaí Puro
+            </h3>
+            <p className="font-sans text-sm md:text-base opacity-80 leading-relaxed font-light max-w-md">
+              Batido na hora, livre de xaropes artificiais. Apenas a polpa da fruta em sua essência.
+            </p>
+          </motion.div>
+        </div>
+
+        <a
+          href="#menu"
+          className="mt-16 md:mt-20 inline-flex items-center gap-3 rounded-full border border-florenzi-accent/30 px-8 py-3 hover:bg-florenzi-accent hover:text-florenzi-text transition-all duration-300"
+        >
+          <span className="font-sans text-[11px] uppercase tracking-[0.25em] font-medium">
+            Descobrir Menu Completo
+          </span>
+          <span className="font-serif italic text-xl">→</span>
+        </a>
+      </div>
     </section>
   );
 };
