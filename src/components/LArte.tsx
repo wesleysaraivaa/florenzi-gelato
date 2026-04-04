@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, type KeyboardEvent } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 type Flavor = { name: string; notes: string };
@@ -126,8 +126,37 @@ const menuCategories: Category[] = [
 
 export const LArte = () => {
   const [activeTab, setActiveTab] = useState(menuCategories[0].id);
+  const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
 
   const activeCategory = menuCategories.find(c => c.id === activeTab) || menuCategories[0];
+
+  const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+    const ids = menuCategories.map(c => c.id);
+    const currentIndex = ids.indexOf(activeTab);
+    if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      const nextIndex = (currentIndex + 1) % ids.length;
+      const nextId = ids[nextIndex];
+      setActiveTab(nextId);
+      queueMicrotask(() => tabRefs.current[nextId]?.focus());
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      const prevIndex = (currentIndex - 1 + ids.length) % ids.length;
+      const prevId = ids[prevIndex];
+      setActiveTab(prevId);
+      queueMicrotask(() => tabRefs.current[prevId]?.focus());
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      const firstId = ids[0];
+      setActiveTab(firstId);
+      queueMicrotask(() => tabRefs.current[firstId]?.focus());
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      const lastId = ids[ids.length - 1];
+      setActiveTab(lastId);
+      queueMicrotask(() => tabRefs.current[lastId]?.focus());
+    }
+  };
 
   return (
     <section id="menu" className="py-24 md:py-32 w-full bg-florenzi-bg overflow-hidden relative min-h-screen flex flex-col justify-center">
@@ -142,8 +171,16 @@ export const LArte = () => {
 
       <div className="w-full relative border-b border-florenzi-text/10 mb-16">
         <div className="w-full max-w-7xl mx-auto">
-          <div className="flex overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] pb-4 snap-x snap-mandatory px-6 md:px-12 lg:px-24">
-            <div className="flex items-center gap-8 md:gap-12 w-max shrink-0">
+          <div
+            className="flex overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] pb-4 snap-x snap-mandatory px-6 md:px-12 lg:px-24"
+          >
+            <div
+              className="flex items-center gap-8 md:gap-12 w-max shrink-0"
+              role="tablist"
+              aria-orientation="horizontal"
+              aria-label="La Nostra Selezione"
+              onKeyDown={onKeyDown}
+            >
               {menuCategories.map((cat) => (
                 <button
                   key={cat.id}
@@ -151,8 +188,19 @@ export const LArte = () => {
                   className={`relative cursor-pointer snap-start font-sans text-xs md:text-sm uppercase tracking-[0.2em] whitespace-nowrap transition-all duration-500 py-2 shrink-0 ${
                     activeTab === cat.id ? 'text-florenzi-text scale-105' : 'text-florenzi-text/30 hover:text-florenzi-text/60 hover:scale-105'
                   }`}
+                  role="tab"
+                  aria-selected={activeTab === cat.id}
+                  aria-controls={`panel-${cat.id}`}
+                  id={`tab-${cat.id}`}
+                  ref={(el) => { tabRefs.current[cat.id] = el; }}
+                  tabIndex={activeTab === cat.id ? 0 : -1}
+                  type="button"
+                  title={cat.name}
                 >
-                  {cat.id}
+                  {cat.name}
+                  <span className={`ml-2 hidden md:inline-flex items-center justify-center rounded-full border border-current/20 px-2 py-0.5 text-[10px] tracking-widest ${activeTab === cat.id ? 'opacity-70' : 'opacity-40'}`}>
+                    {cat.items.length}
+                  </span>
                   {activeTab === cat.id && (
                     <motion.div
                       layoutId="activeTabUnderline"
@@ -181,6 +229,9 @@ export const LArte = () => {
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.6, ease: "easeOut" }}
               className="flex flex-col md:flex-row items-center md:items-start justify-between gap-12 md:gap-24 w-full"
+              role="tabpanel"
+              id={`panel-${activeCategory.id}`}
+              aria-labelledby={`tab-${activeCategory.id}`}
             >
               
               <div className="w-full md:w-5/12 flex flex-col items-center md:items-start group">
@@ -188,6 +239,9 @@ export const LArte = () => {
                   <motion.img 
                     src={activeCategory.image} 
                     alt={activeCategory.name}
+                    loading="lazy"
+                    decoding="async"
+                    sizes="(min-width: 1024px) 24rem, (min-width: 768px) 20rem, 16rem"
                     initial={{ scale: 0.95, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
@@ -216,8 +270,11 @@ export const LArte = () => {
                 <span className="font-sans text-[10px] md:text-xs uppercase tracking-[0.4em] text-florenzi-text/30 mb-8 md:border-b md:border-florenzi-text/10 pb-4 hidden md:block">
                   As Nossas Variações Oficiais
                 </span>
+                <span className="sr-only">
+                  Variações oficiais para {activeCategory.name}
+                </span>
                 
-                <div className="flex flex-col gap-10">
+                <div className="flex flex-col gap-10" role="list" aria-label={`Variações de ${activeCategory.name}`}>
                   {activeCategory.items.map((flavor, index) => (
                     <motion.div 
                       key={index}
@@ -225,6 +282,7 @@ export const LArte = () => {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ duration: 0.6, delay: 0.2 + (index * 0.1), ease: "easeOut" }}
                       className="group/item flex flex-col cursor-pointer"
+                      role="listitem"
                     >
                       <h4 className="font-serif text-2xl md:text-3xl lg:text-4xl text-florenzi-text group-hover/item:italic transition-all duration-500 mb-2">
                         {flavor.name}
