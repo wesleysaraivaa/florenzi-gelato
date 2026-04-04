@@ -9,7 +9,7 @@ export const Equilibrio = () => {
 
       <div className="relative w-full max-w-7xl mx-auto px-6 md:px-12 flex flex-col items-center">
         <div className="text-center max-w-2xl">
-          <span className="font-sans text-[10px] uppercase tracking-[0.4em] opacity-60 mb-6 inline-block">
+          <span className="font-sans text-[10px] uppercase tracking-[0.4em] opacity-80 mb-6 inline-block">
             Equilíbrio
           </span>
           <h2 className="font-serif text-4xl md:text-6xl italic tracking-tight">
@@ -47,9 +47,6 @@ export const Equilibrio = () => {
             className="group relative -mt-6 md:-mt-8 rounded-3xl border border-florenzi-accent/15 bg-florenzi-accent/5 p-8 md:p-10 backdrop-blur-sm z-10"
             role="listitem"
           >
-            <div className="absolute -top-3 left-8 px-3 py-1 rounded-full border border-florenzi-accent/30 bg-florenzi-text text-[10px] font-sans uppercase tracking-[0.3em]">
-              F.
-            </div>
             <div className="flex items-center gap-4 mb-6">
               <img
                 src="/images/menu/cafes.png"
@@ -65,7 +62,7 @@ export const Equilibrio = () => {
             <h3 className="font-serif text-3xl md:text-4xl italic mb-4">
               Cafés de Origem
             </h3>
-            <p className="font-sans text-sm md:text-base opacity-80 leading-relaxed font-light max-w-md">
+            <p className="font-sans text-sm md:text-base opacity-90 leading-relaxed font-light max-w-md">
               Micro-lotes torrados artesanalmente. Notas complexas que complementam a doçura gelada.
             </p>
           </motion.div>
@@ -78,9 +75,6 @@ export const Equilibrio = () => {
             className="group relative md:mt-8 rounded-3xl border border-florenzi-accent/15 bg-florenzi-accent/5 p-8 md:p-10 backdrop-blur-sm z-10"
             role="listitem"
           >
-            <div className="absolute -top-3 left-8 px-3 py-1 rounded-full border border-florenzi-accent/30 bg-florenzi-text text-[10px] font-sans uppercase tracking-[0.3em]">
-              F.
-            </div>
             <div className="flex items-center gap-4 mb-6">
               <img
                 src="/images/menu/acai.png"
@@ -96,7 +90,7 @@ export const Equilibrio = () => {
             <h3 className="font-serif text-3xl md:text-4xl italic mb-4">
               Açaí Puro
             </h3>
-            <p className="font-sans text-sm md:text-base opacity-80 leading-relaxed font-light max-w-md">
+            <p className="font-sans text-sm md:text-base opacity-90 leading-relaxed font-light max-w-md">
               Batido na hora, livre de xaropes artificiais. Apenas a polpa da fruta em sua essência.
             </p>
           </motion.div>

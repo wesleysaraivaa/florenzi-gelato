@@ -1,26 +1,93 @@
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 
-export const Navbar = () => {
-  return (
-    <motion.nav 
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-      className="fixed top-0 inset-x-0 z-50 flex justify-between items-center p-6 md:p-12 xl:px-[5vw] xl:py-16 text-florenzi-text pointer-events-none mix-blend-color-burn"
-    >
-      <div className="font-serif text-3xl md:text-5xl xl:text-7xl tracking-[0.05em] font-medium pointer-events-auto cursor-pointer">
-        Florenzi.
-      </div>
-      
-      <div className="hidden md:flex items-center gap-20 xl:gap-32 text-base lg:text-lg xl:text-2xl font-sans tracking-[0.3em] uppercase font-medium pointer-events-auto">
-        <button className="hover:opacity-60 transition-opacity">L'Arte</button>
-        <button className="hover:opacity-60 transition-opacity">Equilíbrio </button>
-        <button className="hover:opacity-60 transition-opacity">Experiência</button>
-      </div>
+type Item = { id: string; label: string; href: string; cta?: boolean };
 
-      <button className="pointer-events-auto text-base lg:text-lg xl:text-2xl font-sans tracking-[0.2em] uppercase pb-1 border-b-2 border-florenzi-text/30 hover:border-florenzi-text transition-colors">
-        Reservar
-      </button>
+const items: Item[] = [
+  { id: 'menu', label: "L'Arte", href: '#menu' },
+  { id: 'equilibrio', label: 'Equilíbrio', href: '#equilibrio' },
+  { id: 'experiencia', label: 'Experiência', href: '#experiencia' },
+  { id: 'reservar', label: 'Reservar', href: '#', cta: true }
+];
+
+export const Navbar = () => {
+  const [active, setActive] = useState<string>('menu');
+  const [hidden, setHidden] = useState(false);
+  const [lastY, setLastY] = useState(0);
+
+  useEffect(() => {
+    const ids = ['menu', 'equilibrio', 'experiencia'];
+    const observers: IntersectionObserver[] = [];
+    ids.forEach((id) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const obs = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) setActive(id);
+          });
+        },
+        { root: null, rootMargin: '0px 0px -60% 0px', threshold: 0.2 }
+      );
+      obs.observe(el);
+      observers.push(obs);
+    });
+    const onScroll = () => {
+      const y = window.scrollY;
+      setHidden(y > lastY && y > 80);
+      setLastY(y);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      observers.forEach((o) => o.disconnect());
+      window.removeEventListener('scroll', onScroll);
+    };
+  }, [lastY]);
+
+  return (
+    <motion.nav
+      initial={{ y: -80, opacity: 0 }}
+      animate={{ y: hidden ? -80 : 0, opacity: hidden ? 0 : 1 }}
+      transition={{ duration: 0.4, ease: 'easeOut' }}
+      className="fixed top-6 left-1/2 -translate-x-1/2 z-50"
+      role="navigation"
+      aria-label="Navegação flutuante"
+    >
+      <div className="flex items-center gap-3 rounded-full border border-florenzi-text/15 bg-florenzi-bg/90 backdrop-blur-md shadow-[0_14px_40px_rgba(0,0,0,0.1)] px-3 py-3 md:px-4 md:py-3">
+        {items.map((it) => {
+          const isActive = active === it.id;
+          if (it.cta) {
+            return (
+              <a
+                key={it.id}
+                href={it.href}
+                className="ml-1 inline-flex items-center rounded-full bg-florenzi-accent text-florenzi-text px-5 py-3 font-sans text-[12px] md:text-[13px] uppercase tracking-[0.25em] hover:opacity-90 transition-opacity"
+              >
+                {it.label}
+              </a>
+            );
+          }
+          return (
+            <a
+              key={it.id}
+              href={it.href}
+              className={`relative px-5 py-3 rounded-full font-sans text-[12px] md:text-[13px] uppercase tracking-[0.22em] transition-colors ${
+                isActive ? 'text-florenzi-text' : 'text-florenzi-text/60 hover:text-florenzi-text'
+              }`}
+              aria-current={isActive ? 'page' : undefined}
+            >
+              {isActive && (
+                <motion.span
+                  layoutId="floatingNavActive"
+                  className="absolute inset-0 rounded-full bg-florenzi-text/10"
+                  transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                />
+              )}
+              <span className="relative">{it.label}</span>
+            </a>
+          );
+        })}
+      </div>
     </motion.nav>
   );
 };

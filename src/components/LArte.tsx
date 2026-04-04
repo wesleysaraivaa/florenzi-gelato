@@ -124,6 +124,8 @@ const menuCategories: Category[] = [
   }
 ];
 
+ 
+
 export const LArte = () => {
   const [activeTab, setActiveTab] = useState(menuCategories[0].id);
   const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
@@ -198,9 +200,6 @@ export const LArte = () => {
                   title={cat.name}
                 >
                   {cat.name}
-                  <span className={`ml-2 hidden md:inline-flex items-center justify-center rounded-full border border-current/20 px-2 py-0.5 text-[10px] tracking-widest ${activeTab === cat.id ? 'opacity-70' : 'opacity-40'}`}>
-                    {cat.items.length}
-                  </span>
                   {activeTab === cat.id && (
                     <motion.div
                       layoutId="activeTabUnderline"
@@ -260,9 +259,6 @@ export const LArte = () => {
                     />
                     {cat.name}
                   </span>
-                  <span className="ml-4 inline-flex items-center justify-center rounded-full border border-current/20 px-2 py-0.5 text-[10px] tracking-widest opacity-60">
-                    {cat.items.length}
-                  </span>
                 </button>
               ))}
             </div>
@@ -281,7 +277,28 @@ export const LArte = () => {
                 aria-labelledby={`tab-${activeCategory.id}`}
               >
                 <div className="relative rounded-3xl border border-florenzi-text/10 bg-florenzi-text/5 overflow-hidden p-8 md:p-12">
-                  <div className="absolute -right-24 -top-24 w-96 h-96 rounded-full bg-florenzi-accent/30 blur-3xl opacity-40 pointer-events-none" />
+                  <div className="absolute -right-24 -top-24 w-96 h-96 rounded-full bg-florenzi-accent/30 blur-3xl opacity-30 pointer-events-none" />
+                  <svg viewBox="0 0 1000 300" className="absolute inset-x-0 top-1/2 -translate-y-1/2 opacity-30 pointer-events-none" aria-hidden>
+                    <motion.path
+                      d="M 40 220 C 200 60, 520 340, 920 140"
+                      fill="none"
+                      stroke="currentColor"
+                      className="text-florenzi-text/40"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      initial={{ pathLength: 0 }}
+                      animate={{ pathLength: 1 }}
+                      transition={{ duration: 1.4, ease: 'easeInOut' }}
+                      key={activeCategory.id}
+                    />
+                  </svg>
+                  <motion.div
+                    key={`ink-${activeCategory.id}`}
+                    initial={{ width: '0%' }}
+                    animate={{ width: ['0%', '100%', '0%'] }}
+                    transition={{ duration: 0.9, ease: 'easeInOut' }}
+                    className="absolute inset-y-0 left-0 bg-florenzi-accent/10 pointer-events-none"
+                  />
                   <div className="grid grid-cols-1 md:grid-cols-12 items-center gap-10 md:gap-6">
                     <div className="md:col-span-7">
                       <span className="font-sans text-[10px] uppercase tracking-[0.4em] text-florenzi-text/40 mb-3 block">
@@ -306,10 +323,7 @@ export const LArte = () => {
                           animate={{ scale: 1, opacity: 1 }}
                           transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
                           className="w-full h-full object-contain object-center drop-shadow-2xl"
-                          style={{ 
-                            WebkitMaskImage: 'radial-gradient(circle, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%)',
-                            maskImage: 'radial-gradient(circle, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%)'
-                          }}
+                          style={{ clipPath: 'polygon(8% 0%, 100% 6%, 92% 100%, 0% 92%)' }}
                         />
                       </div>
                     </div>

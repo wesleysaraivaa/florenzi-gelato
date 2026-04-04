@@ -19,30 +19,56 @@ export const Hero = ({ frameCount }: HeroProps) => {
   useEffect(() => {
     const CRITICAL_FRAMES = Math.min(15, frameCount);
     let criticalLoaded = 0;
+    let mounted = true;
     const imgArray: (HTMLImageElement | null)[] = new Array(frameCount).fill(null);
 
-    for (let i = 1; i <= frameCount; i++) {
-        const img = new Image();
-        img.src = `/imagens/frame (${i}).webp`;
-        
-        img.onload = () => {
-          imgArray[i-1] = img;
-          
-          if (i <= CRITICAL_FRAMES) {
-            criticalLoaded++;
-            if (criticalLoaded === CRITICAL_FRAMES) setLoaded(true);
+    const loadFrame = (i: number) => {
+      const img = new Image();
+      img.decoding = 'async';
+      img.src = `/imagens/frame (${i}).webp`;
+      img.onload = () => {
+        if (!mounted) return;
+        imgArray[i - 1] = img;
+        if (i <= CRITICAL_FRAMES) {
+          criticalLoaded++;
+          if (criticalLoaded === CRITICAL_FRAMES) setLoaded(true);
+        }
+      };
+      img.onerror = () => {
+        if (!mounted) return;
+        imgArray[i - 1] = null;
+        if (i <= CRITICAL_FRAMES) {
+          criticalLoaded++;
+          if (criticalLoaded === CRITICAL_FRAMES) setLoaded(true);
+        }
+      };
+    };
+
+    for (let i = 1; i <= CRITICAL_FRAMES; i++) loadFrame(i);
+
+    const scheduleRest = () => {
+      let i = CRITICAL_FRAMES + 1;
+      const chunk = () => {
+        const end = Math.min(i + 6, frameCount);
+        for (; i <= end; i++) loadFrame(i);
+        if (i <= frameCount) {
+          const w = window as unknown as { requestIdleCallback?: (cb: () => void, opts?: { timeout?: number }) => number };
+          if (w.requestIdleCallback) {
+            w.requestIdleCallback(chunk, { timeout: 200 });
+          } else {
+            setTimeout(chunk, 50);
           }
-        };
-        
-        img.onerror = () => {
-          imgArray[i-1] = null;
-          if (i <= CRITICAL_FRAMES) {
-            criticalLoaded++;
-            if (criticalLoaded === CRITICAL_FRAMES) setLoaded(true);
-          }
-        };
-    }
+        }
+      };
+      chunk();
+    };
+
+    scheduleRest();
     setImages(imgArray);
+
+    return () => {
+      mounted = false;
+    };
   }, [frameCount]);
 
   useEffect(() => {
@@ -69,19 +95,12 @@ export const Hero = ({ frameCount }: HeroProps) => {
       if (!img) return;
       
       const scale = Math.max(rect.width / img.width, rect.height / img.height);
-      
-      const isMobile = window.innerWidth < 768;
-      let x;
-      
-      if (isMobile) {
-        x = rect.width - (img.width * scale);
-      } else {
-        x = (rect.width / 2) - (img.width / 2) * scale;
-      }
-      
-      const y = (rect.height / 2) - (img.height / 2) * scale;
+      const x = (rect.width - (img.width * scale)) / 2;
+      const y = (rect.height - (img.height * scale)) / 2;
 
-      context.clearRect(0, 0, rect.width, rect.height);
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      context.imageSmoothingEnabled = true;
+      context.imageSmoothingQuality = 'high';
       context.drawImage(img, x, y, img.width * scale, img.height * scale);
     };
 
@@ -91,20 +110,24 @@ export const Hero = ({ frameCount }: HeroProps) => {
       canvas.height = rect.height * dpr;
       canvas.style.width = `${rect.width}px`;
       canvas.style.height = `${rect.height}px`;
+      context.setTransform(1, 0, 0, 1, 0, 0);
       context.scale(dpr, dpr);
       renderFrame(Math.round(playhead.frame));
     };
     updateCanvasSize();
     window.addEventListener('resize', updateCanvasSize);
 
+    const endValue = window.innerWidth < 768 ? "+=160%" : "+=220%";
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: containerRef.current,
         start: "top top",
-        end: "+=220%",
+        end: endValue,
         pin: true,
         scrub: 0.8,
-        anticipatePin: 1
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        onRefresh: () => updateCanvasSize()
       }
     });
 
