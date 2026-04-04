@@ -133,13 +133,13 @@ export const LArte = () => {
   const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
     const ids = menuCategories.map(c => c.id);
     const currentIndex = ids.indexOf(activeTab);
-    if (e.key === 'ArrowRight') {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
       e.preventDefault();
       const nextIndex = (currentIndex + 1) % ids.length;
       const nextId = ids[nextIndex];
       setActiveTab(nextId);
       queueMicrotask(() => tabRefs.current[nextId]?.focus());
-    } else if (e.key === 'ArrowLeft') {
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
       e.preventDefault();
       const prevIndex = (currentIndex - 1 + ids.length) % ids.length;
       const prevId = ids[prevIndex];
@@ -169,7 +169,7 @@ export const LArte = () => {
         </h2>
       </div>
 
-      <div className="w-full relative border-b border-florenzi-text/10 mb-16">
+      <div className="w-full relative border-b border-florenzi-text/10 mb-16 md:hidden">
         <div className="w-full max-w-7xl mx-auto">
           <div
             className="flex overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] pb-4 snap-x snap-mandatory px-6 md:px-12 lg:px-24"
@@ -219,89 +219,141 @@ export const LArte = () => {
         <div className="absolute top-0 right-0 w-16 h-full bg-linear-to-l from-florenzi-bg to-transparent pointer-events-none xl:hidden" />
       </div>
 
-      <div className="w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-24 flex flex-col items-center">
-        <div className="w-full min-h-[700px] md:min-h-[500px]">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeCategory.id}
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -15 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-              className="flex flex-col md:flex-row items-center md:items-start justify-between gap-12 md:gap-24 w-full"
-              role="tabpanel"
-              id={`panel-${activeCategory.id}`}
-              aria-labelledby={`tab-${activeCategory.id}`}
+      <div className="w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-24">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
+          <aside className="hidden md:flex md:col-span-3 flex-col sticky top-24 self-start">
+            <span className="font-sans text-[10px] uppercase tracking-[0.4em] text-florenzi-text/50 mb-6">
+              La Nostra Selezione
+            </span>
+            <div
+              className="flex flex-col gap-2"
+              role="tablist"
+              aria-orientation="vertical"
+              aria-label="La Nostra Selezione"
+              onKeyDown={onKeyDown}
             >
-              
-              <div className="w-full md:w-5/12 flex flex-col items-center md:items-start group">
-                <div className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 relative flex items-center justify-center mb-8 pointer-events-none">
-                  <motion.img 
-                    src={activeCategory.image} 
-                    alt={activeCategory.name}
-                    loading="lazy"
-                    decoding="async"
-                    sizes="(min-width: 1024px) 24rem, (min-width: 768px) 20rem, 16rem"
-                    initial={{ scale: 0.95, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
-                    className="w-full h-full object-contain object-center drop-shadow-2xl mix-blend-lighten md:mix-blend-normal"
-                    style={{ 
-                      WebkitMaskImage: 'radial-gradient(circle, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%)',
-                      maskImage: 'radial-gradient(circle, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%)'
-                    }}
-                  />
-                </div>
-                
-                <div className="text-center md:text-left">
-                  <span className="font-sans text-[10px] uppercase tracking-[0.4em] text-florenzi-text/40 mb-3 block">
-                    {activeCategory.origin}
+              {menuCategories.map((cat) => (
+                <button
+                  key={cat.id}
+                  onClick={() => setActiveTab(cat.id)}
+                  className={`flex items-center justify-between rounded-full px-5 py-3 text-left font-sans text-[11px] uppercase tracking-[0.2em] transition-all border ${
+                    activeTab === cat.id
+                      ? 'bg-florenzi-text/5 border-florenzi-text/20 text-florenzi-text'
+                      : 'bg-transparent border-florenzi-text/10 text-florenzi-text/50 hover:text-florenzi-text/80 hover:border-florenzi-text/20'
+                  }`}
+                  role="tab"
+                  aria-selected={activeTab === cat.id}
+                  aria-controls={`panel-${cat.id}`}
+                  id={`tab-${cat.id}`}
+                  ref={(el) => { tabRefs.current[cat.id] = el; }}
+                  tabIndex={activeTab === cat.id ? 0 : -1}
+                  type="button"
+                  title={cat.name}
+                >
+                  <span className="flex items-center gap-3">
+                    <img
+                      src={cat.image}
+                      alt={cat.name}
+                      className="w-6 h-6 rounded-full object-contain object-center"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    {cat.name}
                   </span>
-                  <h3 className="font-serif text-3xl md:text-5xl text-florenzi-text mb-6 italic font-medium">
-                    {activeCategory.name}
-                  </h3>
-                  <p className="font-sans text-xs md:text-sm text-florenzi-text/60 leading-relaxed font-light max-w-sm">
-                    {activeCategory.description}
-                  </p>
-                </div>
-              </div>
+                  <span className="ml-4 inline-flex items-center justify-center rounded-full border border-current/20 px-2 py-0.5 text-[10px] tracking-widest opacity-60">
+                    {cat.items.length}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </aside>
 
-              <div className="w-full md:w-7/12 flex flex-col pt-4 md:pt-16 lg:pt-24 border-t md:border-t-0 border-florenzi-text/10 mt-8 md:mt-0">
-                <span className="font-sans text-[10px] md:text-xs uppercase tracking-[0.4em] text-florenzi-text/30 mb-8 md:border-b md:border-florenzi-text/10 pb-4 hidden md:block">
-                  As Nossas Variações Oficiais
-                </span>
-                <span className="sr-only">
-                  Variações oficiais para {activeCategory.name}
-                </span>
-                
-                <div className="flex flex-col gap-10" role="list" aria-label={`Variações de ${activeCategory.name}`}>
-                  {activeCategory.items.map((flavor, index) => (
-                    <motion.div 
-                      key={index}
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.6, delay: 0.2 + (index * 0.1), ease: "easeOut" }}
-                      className="group/item flex flex-col cursor-pointer"
-                      role="listitem"
-                    >
-                      <h4 className="font-serif text-2xl md:text-3xl lg:text-4xl text-florenzi-text group-hover/item:italic transition-all duration-500 mb-2">
-                        {flavor.name}
-                      </h4>
-                      <div className="flex items-center gap-4">
-                        <div className="w-6 h-px bg-florenzi-text/20 group-hover/item:w-12 transition-all duration-500" />
-                        <p className="font-sans text-[10px] md:text-xs text-florenzi-text/50 uppercase tracking-widest font-light">
+          <div className="md:col-span-9">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeCategory.id}
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                role="tabpanel"
+                id={`panel-${activeCategory.id}`}
+                aria-labelledby={`tab-${activeCategory.id}`}
+              >
+                <div className="relative rounded-3xl border border-florenzi-text/10 bg-florenzi-text/5 overflow-hidden p-8 md:p-12">
+                  <div className="absolute -right-24 -top-24 w-96 h-96 rounded-full bg-florenzi-accent/30 blur-3xl opacity-40 pointer-events-none" />
+                  <div className="grid grid-cols-1 md:grid-cols-12 items-center gap-10 md:gap-6">
+                    <div className="md:col-span-7">
+                      <span className="font-sans text-[10px] uppercase tracking-[0.4em] text-florenzi-text/40 mb-3 block">
+                        {activeCategory.origin}
+                      </span>
+                      <h3 className="font-serif text-3xl md:text-5xl text-florenzi-text mb-6 italic font-medium">
+                        {activeCategory.name}
+                      </h3>
+                      <p className="font-sans text-xs md:text-sm text-florenzi-text/60 leading-relaxed font-light max-w-xl">
+                        {activeCategory.description}
+                      </p>
+                    </div>
+                    <div className="md:col-span-5 flex justify-center md:justify-end">
+                      <div className="w-56 h-56 md:w-72 md:h-72 relative">
+                        <motion.img 
+                          src={activeCategory.image} 
+                          alt={activeCategory.name}
+                          loading="lazy"
+                          decoding="async"
+                          sizes="(min-width: 1024px) 18rem, (min-width: 768px) 16rem, 14rem"
+                          initial={{ scale: 0.95, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
+                          className="w-full h-full object-contain object-center drop-shadow-2xl"
+                          style={{ 
+                            WebkitMaskImage: 'radial-gradient(circle, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%)',
+                            maskImage: 'radial-gradient(circle, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%)'
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-10">
+                  <span className="font-sans text-[10px] md:text-xs uppercase tracking-[0.4em] text-florenzi-text/40 mb-4 block">
+                    As Nossas Variações Oficiais
+                  </span>
+                  <span className="sr-only">
+                    Variações oficiais para {activeCategory.name}
+                  </span>
+                  <div
+                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
+                    role="list"
+                    aria-label={`Variações de ${activeCategory.name}`}
+                  >
+                    {activeCategory.items.map((flavor, index) => (
+                      <motion.div 
+                        key={index}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.15 + (index * 0.07), ease: "easeOut" }}
+                        className="group rounded-2xl border border-florenzi-text/10 bg-florenzi-bg/60 p-6 hover:border-florenzi-text/30 transition-all duration-500"
+                        role="listitem"
+                      >
+                        <div className="flex items-start justify-between">
+                          <h4 className="font-serif text-2xl md:text-3xl text-florenzi-text group-hover:italic transition-all duration-500">
+                            {flavor.name}
+                          </h4>
+                          <span className="mt-1 w-2 h-2 rounded-full bg-florenzi-text/20 group-hover:bg-florenzi-text/40 transition-all duration-300" />
+                        </div>
+                        <p className="mt-3 font-sans text-[10px] md:text-xs text-florenzi-text/50 uppercase tracking-widest font-light">
                           {flavor.notes}
                         </p>
-                      </div>
-                    </motion.div>
-                  ))}
+                      </motion.div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-              
-            </motion.div>
-          </AnimatePresence>
+              </motion.div>
+            </AnimatePresence>
+          </div>
         </div>
-
       </div>
     </section>
   );
