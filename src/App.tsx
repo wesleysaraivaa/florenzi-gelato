@@ -10,7 +10,7 @@ import { Footer } from './components/Footer';
 function App() {
   return (
     <ReactLenis root options={{ lerp: 0.1, duration: 1.5, smoothWheel: true }}>
-      <main className="bg-florenzi-bg min-h-screen text-florenzi-text selection:bg-florenzi-accent selection:text-white">
+      <main id="inicio" className="bg-florenzi-bg min-h-screen text-florenzi-text selection:bg-florenzi-accent selection:text-white">
         <Navbar />
         <Hero frameCount={63} />
         <Equilibrio />

@@ -4,50 +4,52 @@ import { motion } from 'framer-motion';
 type Item = { id: string; label: string; href: string; cta?: boolean };
 
 const items: Item[] = [
-  { id: 'menu', label: "L'Arte", href: '#menu' },
+  { id: 'inicio', label: 'Início', href: '#inicio' },
   { id: 'equilibrio', label: 'Equilíbrio', href: '#equilibrio' },
+  { id: 'menu', label: "L'Arte", href: '#menu' },
   { id: 'experiencia', label: 'Experiência', href: '#experiencia' },
   { id: 'reservar', label: 'Reservar', href: '#', cta: true }
 ];
 
 export const Navbar = () => {
-  const [active, setActive] = useState<string>('menu');
-  const [hidden, setHidden] = useState(false);
-  const [lastY, setLastY] = useState(0);
+  const [active, setActive] = useState<string>('inicio');
 
   useEffect(() => {
-    const ids = ['menu', 'equilibrio', 'experiencia'];
-    const observers: IntersectionObserver[] = [];
-    ids.forEach((id) => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      const obs = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) setActive(id);
-          });
-        },
-        { root: null, rootMargin: '0px 0px -60% 0px', threshold: 0.2 }
-      );
-      obs.observe(el);
-      observers.push(obs);
-    });
+    const ids = ['inicio', 'equilibrio', 'menu', 'experiencia'];
+    
     const onScroll = () => {
-      const y = window.scrollY;
-      setHidden(y > lastY && y > 80);
-      setLastY(y);
+
+      const elements = ids
+        .map(id => document.getElementById(id))
+        .filter(el => el !== null);
+
+      elements.sort((a, b) => a!.offsetTop - b!.offsetTop);
+
+      if (elements.length > 0) {
+        let currentActive = elements[0]!.id;
+        for (const el of elements) {
+          const rect = el!.getBoundingClientRect();
+          // Ativa a seção quando  a margem superior passar de 40% da tela
+          if (rect.top <= window.innerHeight * 0.4) {
+            currentActive = el!.id;
+          }
+        }
+        setActive(prev => currentActive !== prev ? currentActive : prev);
+      }
     };
+
     window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
     return () => {
-      observers.forEach((o) => o.disconnect());
       window.removeEventListener('scroll', onScroll);
     };
-  }, [lastY]);
+  }, []);
 
   return (
     <motion.nav
       initial={{ y: -80, opacity: 0 }}
-      animate={{ y: hidden ? -80 : 0, opacity: hidden ? 0 : 1 }}
+      animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.4, ease: 'easeOut' }}
       className="fixed top-6 left-1/2 -translate-x-1/2 z-50"
       role="navigation"
