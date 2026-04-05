@@ -173,25 +173,18 @@ export const Hero = ({ frameCount }: HeroProps) => {
           transition={{ duration: 1.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
           className="max-w-4xl"
         >
-          <span className="block font-sans text-xs md:text-base lg:text-lg xl:text-2xl uppercase tracking-[0.5em] font-medium text-florenzi-text/50 mb-8 md:mb-12 xl:mb-16 ml-1">
-            Florenzi quem prova, volta!
+          <span className="block font-sans text-sm md:text-lg lg:text-xl xl:text-3xl uppercase tracking-[0.4em] font-medium text-florenzi-text/60 mb-6 md:mb-8 ml-1">
+            L'Arte del Gelato
           </span>
-          <h1 className="font-serif text-5xl md:text-7xl lg:text-[9rem] xl:text-[9vw] leading-[0.85] text-florenzi-text tracking-tighter font-medium">
-            L'Arte del <br/>
-            <span className="italic font-light sm:pl-16 xl:pl-32">Gelato Vero</span>
+          <h1 className="font-serif text-7xl md:text-8xl lg:text-[11rem] xl:text-[12vw] leading-[0.85] text-florenzi-text tracking-tighter font-medium">
+            Gelato <br/>
+            <span className="italic font-light sm:pl-16 xl:pl-32">Vero</span>
           </h1>
           
           <div className="mt-10 md:mt-16 flex flex-col items-start gap-8">
             <p className="font-sans text-xs md:text-lg lg:text-2xl xl:text-4xl text-florenzi-text/70 max-w-xs md:max-w-xl lg:max-w-2xl xl:max-w-4xl leading-relaxed">
-              Feito às mãos. Comido devagar.
+              Florenzi quem prova,volta!
             </p>
-            
-            <motion.div 
-              initial={{ width: 0 }}
-              animate={{ width: "4rem" }}
-              transition={{ duration: 2, delay: 1, ease: "easeInOut" }}
-              className="h-px bg-florenzi-text/30"
-            />
           </div>
         </motion.div>
       </div>

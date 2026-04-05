@@ -12,8 +12,8 @@ export const Experiencia = () => {
     <section id="experiencia" ref={containerRef} className="relative w-full overflow-hidden bg-florenzi-text py-48 px-6 md:px-12 flex flex-col items-center">
 
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute -top-40 -left-32 w-[40rem] h-[40rem] rounded-full bg-florenzi-accent/20 blur-[140px]" />
-        <div className="absolute -bottom-48 -right-40 w-[34rem] h-[34rem] rounded-full bg-florenzi-accent/10 blur-[120px]" />
+        <div className="absolute -top-40 -left-32 w-160 h-160 rounded-full bg-florenzi-accent/20 blur-[140px]" />
+        <div className="absolute -bottom-48 -right-40 w-136 h-136 rounded-full bg-florenzi-accent/10 blur-[120px]" />
         <svg viewBox="0 0 1200 600" className="absolute inset-0 opacity-30" aria-hidden>
           <motion.path
             d="M 80 520 C 260 360, 420 640, 640 440 S 980 260, 1120 320"
@@ -34,7 +34,7 @@ export const Experiencia = () => {
 
         <motion.div style={{ y: yImage }} className="w-full md:w-1/2 aspect-3/4 relative">
           <div className="absolute -z-10 inset-0 rounded-[2.2rem] bg-florenzi-accent/10 blur-2xl" />
-          <div className="w-full h-full rounded-[2rem] border border-florenzi-accent/20 p-3 bg-white/0 backdrop-blur-[1.5px] relative overflow-hidden">
+          <div className="w-full h-full rounded-4xl border border-florenzi-accent/20 p-3 bg-white/0 backdrop-blur-[1.5px] relative overflow-hidden">
             <img 
               src="/LOJA-FRENTE.jpg" 
               alt="Fachada Florenzi Gelateria em Ubajara-Ce" 

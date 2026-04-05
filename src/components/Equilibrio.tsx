@@ -4,7 +4,7 @@ export const Equilibrio = () => {
   return (
     <section id="equilibrio" className="relative w-full py-48 bg-florenzi-text text-florenzi-accent">
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute -top-48 left-1/2 -translate-x-1/2 w-[36rem] h-[36rem] rounded-full bg-florenzi-accent/15 blur-[140px]" />
+        <div className="absolute -top-48 left-1/2 -translate-x-1/2 w-xl h-144 rounded-full bg-florenzi-accent/15 blur-[140px]" />
       </div>
 
       <div className="relative w-full max-w-7xl mx-auto px-6 md:px-12 flex flex-col items-center">
