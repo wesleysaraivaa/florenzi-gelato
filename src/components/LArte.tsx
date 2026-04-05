@@ -348,18 +348,28 @@ export const LArte = () => {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.15 + (index * 0.07), ease: "easeOut" }}
-                        className="group rounded-2xl border border-florenzi-text/10 bg-florenzi-bg/60 p-6 hover:border-florenzi-text/30 transition-all duration-500"
+                        className="group flex flex-col justify-between cursor-pointer rounded-2xl border border-florenzi-text/10 bg-florenzi-bg/60 p-6 hover:border-florenzi-text/20 hover:bg-white/40 hover:shadow-2xl hover:shadow-florenzi-text/5 hover:-translate-y-1 hover:scale-[1.02] transition-all duration-500"
                         role="listitem"
                       >
-                        <div className="flex items-start justify-between">
-                          <h4 className="font-serif text-2xl md:text-3xl text-florenzi-text group-hover:italic transition-all duration-500">
-                            {flavor.name}
-                          </h4>
-                          <span className="mt-1 w-2 h-2 rounded-full bg-florenzi-text/20 group-hover:bg-florenzi-text/40 transition-all duration-300" />
+                        <div>
+                          <div className="flex items-start justify-between">
+                            <h4 className="font-serif text-2xl md:text-3xl text-florenzi-text group-hover:italic transition-all duration-500">
+                              {flavor.name}
+                            </h4>
+                          </div>
+                          <p className="mt-3 font-sans text-[10px] md:text-xs text-florenzi-text/50 uppercase tracking-widest font-light">
+                            {flavor.notes}
+                          </p>
                         </div>
-                        <p className="mt-3 font-sans text-[10px] md:text-xs text-florenzi-text/50 uppercase tracking-widest font-light">
-                          {flavor.notes}
-                        </p>
+                        
+                        <div className="mt-8 flex items-center justify-between border-t border-florenzi-text/5 pt-4 opacity-60 group-hover:opacity-100 transition-opacity duration-500">
+                          <span className="font-sans text-[9px] uppercase tracking-[0.3em] text-florenzi-text font-medium group-hover:text-florenzi-text transition-colors">
+                            Pedir Agora
+                          </span>
+                          <span className="text-florenzi-text/30 group-hover:text-florenzi-text group-hover:translate-x-1 transition-all duration-300">
+                            →
+                          </span>
+                        </div>
                       </motion.div>
                     ))}
                   </div>
