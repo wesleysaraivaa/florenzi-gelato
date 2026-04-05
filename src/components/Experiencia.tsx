@@ -5,92 +5,105 @@ export const Experiencia = () => {
   const containerRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: containerRef, offset: ["start end", "end start"] });
 
-  const yImage = useTransform(scrollYProgress, [0, 1], [-50, 50]);
-  const yText = useTransform(scrollYProgress, [0, 1], [100, -100]);
+  const yImage = useTransform(scrollYProgress, [0, 1], [-80, 80]);
+  const yText = useTransform(scrollYProgress, [0, 1], [40, -40]);
 
   return (
-    <section id="experiencia" ref={containerRef} className="relative w-full overflow-hidden bg-florenzi-text py-48 px-6 md:px-12 flex flex-col items-center">
+    <section id="experiencia" ref={containerRef} className="relative w-full bg-florenzi-bg py-48 lg:py-64 overflow-hidden flex items-center">
+      
+      <div className="absolute top-16 md:top-24 left-0 w-full flex items-center justify-center gap-4 md:gap-8 opacity-90 pointer-events-none z-20 px-4 md:px-12">
+        <div className="flex items-center gap-4 md:gap-8 flex-1 justify-end">
+          <div className="w-full max-w-48 md:max-w-96 h-[1.5px] bg-linear-to-l from-[#F4F5F0] to-transparent" />
+          <div className="w-12 md:w-24 h-[1.5px] shrink-0 bg-[#009246]" />
+        </div>
+        
+        <div className="flex flex-col items-center justify-center text-florenzi-text/90 scale-125 md:scale-[1.8] shrink-0">
+          <svg width="14" height="20" viewBox="0 0 14 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 8C3 4.5 11 4.5 11 8" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+            <path d="M2.5 9.5C5 10 9 10 11.5 9.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+            <path d="M4 10.5L7 17.5L10 10.5" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round"/>
+          </svg>
+        </div>
 
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute -top-40 -left-32 w-160 h-160 rounded-full bg-florenzi-accent/20 blur-[140px]" />
-        <div className="absolute -bottom-48 -right-40 w-136 h-136 rounded-full bg-florenzi-accent/10 blur-[120px]" />
-        <svg viewBox="0 0 1200 600" className="absolute inset-0 opacity-30" aria-hidden>
-          <motion.path
-            d="M 80 520 C 260 360, 420 640, 640 440 S 980 260, 1120 320"
-            fill="none"
-            stroke="currentColor"
-            className="text-florenzi-accent/40"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            initial={{ pathLength: 0 }}
-            whileInView={{ pathLength: 1 }}
-            viewport={{ once: true, amount: 0.5 }}
-            transition={{ duration: 1.8, ease: 'easeInOut' }}
-          />
-        </svg>
+        <div className="flex items-center gap-4 md:gap-8 flex-1 justify-start">
+          <div className="w-12 md:w-24 h-[1.5px] shrink-0 bg-[#CE2B37]" />
+          <div className="w-full max-w-48 md:max-w-96 h-[1.5px] bg-linear-to-r from-[#F4F5F0] to-transparent" />
+        </div>
       </div>
 
-      <div className="relative z-10 w-full max-w-7xl flex flex-col md:flex-row items-center justify-center gap-16 md:gap-24">
+      {/* Absolute minimal geometric accent */}
+      <div className="absolute top-32 right-[20%] w-px h-[calc(100%-8rem)] bg-florenzi-text/5 hidden lg:block" />
 
-        <motion.div style={{ y: yImage }} className="w-full md:w-1/2 aspect-3/4 relative">
-          <div className="absolute -z-10 inset-0 rounded-[2.2rem] bg-florenzi-accent/10 blur-2xl" />
-          <div className="w-full h-full rounded-4xl border border-florenzi-accent/20 p-3 bg-white/0 backdrop-blur-[1.5px] relative overflow-hidden">
-            <img 
-              src="/LOJA-FRENTE.jpg" 
-              alt="Fachada Florenzi Gelateria em Ubajara-Ce" 
-              loading="lazy"
-              className="w-full h-full object-cover rounded-[1.6rem] transition-transform duration-[1.5s] ease-out hover:scale-105"
-            />
-            <div className="absolute -bottom-6 -right-6 w-24 h-24 rounded-full ring-1 ring-florenzi-accent/40 overflow-hidden bg-florenzi-bg">
-              <img
-                src="/LOJA-FRENTE.jpg"
-                alt=""
+      <div className="w-full max-w-360 mx-auto px-6 md:px-12 lg:px-24 relative z-10">
+        
+        <div className="flex flex-col md:flex-row items-center justify-between gap-24 lg:gap-32">
+          
+          {/* Editorial Image Block */}
+          <motion.div 
+            style={{ y: yImage }} 
+            className="w-full md:w-5/12 lg:w-[45%]"
+          >
+            <div className="w-full aspect-4/5 overflow-hidden relative group">
+              <motion.img 
+                src="/LOJA-FRENTE.jpg" 
+                alt="A Experiência Florenzi Gelateria" 
                 loading="lazy"
-                className="w-full h-full object-cover"
+                initial={{ scale: 1.15 }}
+                whileInView={{ scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.8, ease: "easeOut" }}
+                className="w-full h-full object-cover transform-gpu transition-transform duration-[2s] group-hover:scale-105"
               />
             </div>
-          </div>
-          <div className="pointer-events-none absolute -bottom-6 -left-6 w-24 h-24 border-l border-b border-florenzi-accent/30" />
-          <div className="pointer-events-none absolute -top-6 -right-6 w-24 h-24 border-r border-t border-florenzi-accent/30" />
-        </motion.div>
-
-        <motion.div style={{ y: yText }} className="w-full md:w-1/2 flex flex-col text-center md:text-left mt-16 md:mt-0 text-florenzi-accent">
-          <span className="font-sans text-[10px] uppercase tracking-[0.4em] opacity-80 mb-6">
-            A Experiência Física
-          </span>
-          <h2 className="font-serif text-4xl md:text-6xl tracking-tight leading-[1.1]">
-            Um lugar feito<br/>
-            <span className="italic font-light">para parar</span> e<br/>
-            prestar atenção.
-          </h2>
-          <div className="mt-2 h-px w-24 bg-florenzi-accent/30" />
-          <div className="mt-6 rounded-2xl border border-florenzi-accent/15 bg-florenzi-accent/5 p-6 backdrop-blur-sm relative">
-            <p className="font-sans text-sm md:text-base opacity-90 leading-relaxed font-light max-w-xl">
-              Não há pressa na Florenzi. O espaço foi pensado para que o silêncio trabalhe a favor do gosto — cada detalhe afasta o ruído e aproxima o sabor.
-            </p>
-            <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div className="rounded-full border border-florenzi-accent/20 px-4 py-2 font-sans text-[10px] uppercase tracking-[0.25em] text-florenzi-accent/80 text-center">
-                Silêncio
-              </div>
-              <div className="rounded-full border border-florenzi-accent/20 px-4 py-2 font-sans text-[10px] uppercase tracking-[0.25em] text-florenzi-accent/80 text-center">
-                Luz Natural
-              </div>
-              <div className="rounded-full border border-florenzi-accent/20 px-4 py-2 font-sans text-[10px] uppercase tracking-[0.25em] text-florenzi-accent/80 text-center">
-                Ritmo Lento
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-16 self-center md:self-start">
-            <a href="#" className="inline-flex items-center gap-3 rounded-full border border-florenzi-accent/30 px-6 py-3 hover:bg-florenzi-accent hover:text-florenzi-text transition-all duration-300">
-              <span className="font-sans text-[11px] uppercase tracking-[0.25em] font-medium">
-                Como chegar
+            <div className="mt-8 flex items-center gap-6">
+              <div className="w-16 h-px bg-florenzi-text/20" />
+              <span className="font-sans text-[9px] uppercase tracking-[0.3em] text-florenzi-text/40">
+                Experiência física
               </span>
-              <span className="font-serif italic text-xl">→</span>
-            </a>
-          </div>
-        </motion.div>
+            </div>
+          </motion.div>
 
+          {/* Pure Typography Block */}
+          <motion.div 
+            style={{ y: yText }} 
+            className="w-full md:w-6/12 lg:w-[45%] flex flex-col"
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 1, ease: "easeOut" }}
+            >
+              <h2 className="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-[6rem] xl:text-[6.5rem] text-florenzi-text tracking-tighter leading-[0.95] mb-16">
+                Um espaço <br/>
+                <span className="italic font-light opacity-90 pl-12 lg:pl-24 block mt-2">feito para</span>
+                <span className="block mt-2">viver momentos.</span>
+              </h2>
+            </motion.div>
+            
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
+            >
+              <p className="font-sans text-base md:text-xl text-florenzi-text/70 max-w-md leading-relaxed font-light mb-20">
+                Cada detalhe pensado para tornar sua visita especial.
+              </p>
+              
+              <a href="#" className="inline-flex items-center gap-8 group">
+                <span className="font-sans text-[11px] uppercase tracking-[0.3em] font-medium text-florenzi-text">
+                  Como Chegar
+                </span>
+                <span className="w-12 h-12 flex flex-col items-center justify-center rounded-full border border-florenzi-text/20 group-hover:bg-florenzi-text group-hover:text-florenzi-bg transition-all duration-700 hover:scale-110">
+                  <span className="font-serif italic text-xl leading-none group-hover:-rotate-45 transition-transform duration-500">→</span>
+                </span>
+              </a>
+            </motion.div>
+          </motion.div>
+
+        </div>
+        
       </div>
     </section>
   );

@@ -31,7 +31,7 @@ export const Footer = () => {
 
       <div className="w-full max-w-6xl flex justify-between items-center opacity-40 font-sans text-[10px] uppercase tracking-[0.2em]">
         <span>© 2026 Florenzi Gelato Vero.</span>
-        <span>Made with Obsession.</span>
+        <span>@Uniwersotech - Made with Obsession.</span>
       </div>
 
     </footer>
