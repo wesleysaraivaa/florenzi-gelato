@@ -44,27 +44,34 @@ export const Equilibrio = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6, ease: 'easeOut' }}
-            className="group relative -mt-6 md:-mt-8 rounded-3xl border border-florenzi-accent/15 bg-florenzi-accent/5 p-8 md:p-10 backdrop-blur-sm z-10"
+            className="group relative -mt-6 md:-mt-8 rounded-4xl border border-florenzi-bg/10 bg-florenzi-text/60 p-8 md:p-12 backdrop-blur-xl shadow-2xl shadow-black/40 overflow-hidden z-10 hover:-translate-y-2 transition-all duration-700"
             role="listitem"
           >
-            <div className="flex items-center gap-4 mb-6">
-              <img
-                src="/images/menu/cafes.png"
-                alt="Cafés de Origem"
-                className="w-10 h-10 rounded-full object-contain object-center ring-1 ring-florenzi-accent/20"
-                loading="lazy"
-                decoding="async"
-              />
-              <span className="font-sans text-[10px] uppercase tracking-[0.35em] opacity-70">
-                Energia
-              </span>
+            <div className="absolute inset-0 z-0 opacity-10 group-hover:opacity-20 transition-opacity duration-700 mix-blend-overlay">
+              <img src="/images/menu/cafes.png" alt="" className="w-full h-full object-cover scale-150 blur-2xl grayscale" />
             </div>
-            <h3 className="font-serif text-3xl md:text-4xl italic mb-4">
-              Cafés de Origem
-            </h3>
-            <p className="font-sans text-sm md:text-base opacity-90 leading-relaxed font-light max-w-md">
-              Micro-lotes torrados artesanalmente. Notas complexas que complementam a doçura gelada.
-            </p>
+            <div className="absolute inset-0 z-0 bg-linear-to-b from-florenzi-bg/5 to-transparent opacity-50" />
+
+            <div className="relative z-10">
+              <div className="flex items-center gap-4 mb-8">
+                <img
+                  src="/images/menu/cafes.png"
+                  alt="Cafés de Origem"
+                  className="w-12 h-12 rounded-full object-cover object-center ring-1 ring-florenzi-accent/30 shadow-lg"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <span className="font-sans text-[10px] uppercase tracking-[0.35em] opacity-80 font-medium">
+                  Energia
+                </span>
+              </div>
+              <h3 className="font-serif text-4xl md:text-5xl italic mb-4 drop-shadow-sm">
+                Cafés de Origem
+              </h3>
+              <p className="font-sans text-sm md:text-base opacity-90 leading-relaxed font-light max-w-sm">
+                Micro-lotes torrados artesanalmente. Notas complexas que complementam a doçura gelada.
+              </p>
+            </div>
           </motion.div>
 
           <motion.div
@@ -72,27 +79,34 @@ export const Equilibrio = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
-            className="group relative md:mt-8 rounded-3xl border border-florenzi-accent/15 bg-florenzi-accent/5 p-8 md:p-10 backdrop-blur-sm z-10"
+            className="group relative md:mt-12 rounded-4xl border border-florenzi-bg/10 bg-florenzi-text/60 p-8 md:p-12 backdrop-blur-xl shadow-2xl shadow-black/40 overflow-hidden z-10 hover:-translate-y-2 transition-all duration-700"
             role="listitem"
           >
-            <div className="flex items-center gap-4 mb-6">
-              <img
-                src="/images/menu/acai.png"
-                alt="Açaí Puro"
-                className="w-10 h-10 rounded-full object-contain object-center ring-1 ring-florenzi-accent/20"
-                loading="lazy"
-                decoding="async"
-              />
-              <span className="font-sans text-[10px] uppercase tracking-[0.35em] opacity-70">
-                Natureza
-              </span>
+            <div className="absolute inset-0 z-0 opacity-10 group-hover:opacity-20 transition-opacity duration-700 mix-blend-overlay">
+              <img src="/images/menu/acai.png" alt="" className="w-full h-full object-cover scale-150 blur-2xl grayscale" />
             </div>
-            <h3 className="font-serif text-3xl md:text-4xl italic mb-4">
-              Açaí Puro
-            </h3>
-            <p className="font-sans text-sm md:text-base opacity-90 leading-relaxed font-light max-w-md">
-              Batido na hora, livre de xaropes artificiais. Apenas a polpa da fruta em sua essência.
-            </p>
+            <div className="absolute inset-0 z-0 bg-linear-to-b from-florenzi-bg/5 to-transparent opacity-50" />
+
+            <div className="relative z-10">
+              <div className="flex items-center gap-4 mb-8">
+                <img
+                  src="/images/menu/acai.png"
+                  alt="Açaí Puro"
+                  className="w-12 h-12 rounded-full object-cover object-center ring-1 ring-florenzi-accent/30 shadow-lg"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <span className="font-sans text-[10px] uppercase tracking-[0.35em] opacity-80 font-medium">
+                  Natureza
+                </span>
+              </div>
+              <h3 className="font-serif text-4xl md:text-5xl italic mb-4 drop-shadow-sm">
+                Açaí Puro
+              </h3>
+              <p className="font-sans text-sm md:text-base opacity-90 leading-relaxed font-light max-w-sm">
+                Batido na hora, livre de xaropes artificiais. Apenas a polpa da fruta em sua essência.
+              </p>
+            </div>
           </motion.div>
         </div>
 
