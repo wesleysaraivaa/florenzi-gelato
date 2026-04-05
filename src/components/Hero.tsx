@@ -117,7 +117,7 @@ export const Hero = ({ frameCount }: HeroProps) => {
     updateCanvasSize();
     window.addEventListener('resize', updateCanvasSize);
 
-    const endValue = window.innerWidth < 768 ? "+=160%" : "+=220%";
+    const endValue = window.innerWidth < 768 ? "+=120%" : "+=180%";
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: containerRef.current,
