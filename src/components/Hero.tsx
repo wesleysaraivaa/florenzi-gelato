@@ -94,17 +94,23 @@ export const Hero = ({ frameCount }: HeroProps) => {
       
       if (!img) return;
       
-      const scale = Math.max(rect.width / img.width, rect.height / img.height);
+      let scale = Math.max(rect.width / img.width, rect.height / img.height);
+      const isPortrait = rect.width < rect.height;
+      
+      if (isPortrait) {
+        // Applica zoom in de 20% na imagem em aparelhos verticais
+        // Isso resolve o problema visual de estar "muito pequeno" comparado ao texto
+        scale *= 1.25; 
+      }
+      
       let x = (rect.width - (img.width * scale)) / 2;
       
-      const isPortrait = rect.width < rect.height;
       if (isPortrait || rect.width <= 1024) {
-        // Na renderização original, o gelato fica à direita.
-        // Alinhando o X com * 1 garantimos que o copo inteiro toque a borda direita da tela,
-        // removendo a parte morta do centro que corta o objeto em viewports apertados.
         x = (rect.width - (img.width * scale)) * 0.95;
       }
 
+      // Se a imagem sofreu zoom, a origin_y centralizará a porção cortada 
+      // removendo excesso identicamente no topo e rodapé.
       const y = (rect.height - (img.height * scale)) / 2;
 
       context.clearRect(0, 0, canvas.width, canvas.height);
@@ -162,7 +168,7 @@ export const Hero = ({ frameCount }: HeroProps) => {
   }, [loaded, images, frameCount]);
 
   return (
-    <section ref={containerRef} className="relative w-full h-dvh overflow-hidden bg-florenzi-bg flex items-center">
+    <section ref={containerRef} className="relative w-full h-[100vh] overflow-hidden bg-florenzi-bg flex items-center">
       
       <div className="absolute inset-0 w-full h-full z-0 pointer-events-none overflow-hidden">
         {!loaded && (
