@@ -95,7 +95,12 @@ export const Hero = ({ frameCount }: HeroProps) => {
       if (!img) return;
       
       const scale = Math.max(rect.width / img.width, rect.height / img.height);
-      const x = (rect.width - (img.width * scale)) / 2;
+      let x = (rect.width - (img.width * scale)) / 2;
+      
+      if (rect.width < 768) {
+        x = (rect.width - (img.width * scale)) * 0.85;
+      }
+
       const y = (rect.height - (img.height * scale)) / 2;
 
       context.clearRect(0, 0, canvas.width, canvas.height);
@@ -161,7 +166,7 @@ export const Hero = ({ frameCount }: HeroProps) => {
             <span className="text-[10px] tracking-[0.5em] uppercase opacity-30 animate-pulse font-sans font-medium">...</span>
           </div>
         )}
-        <canvas ref={canvasRef} className="block w-full h-full object-cover" />
+        <canvas ref={canvasRef} className="block absolute inset-0 z-0" />
       </div>
 
       <div className="absolute inset-0 z-1 bg-linear-to-b md:bg-linear-to-r from-florenzi-bg/95 via-florenzi-bg/50 to-transparent pointer-events-none" />
@@ -173,16 +178,16 @@ export const Hero = ({ frameCount }: HeroProps) => {
           transition={{ duration: 1.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
           className="max-w-4xl"
         >
-          <span className="block font-sans text-sm md:text-lg lg:text-xl xl:text-3xl uppercase tracking-[0.4em] font-medium text-florenzi-text/60 mb-6 md:mb-8 ml-1">
+          <span className="block font-sans text-[10px] md:text-xs lg:text-sm uppercase tracking-[0.4em] font-medium text-florenzi-text/60 mb-6 md:mb-8 ml-1">
             L'Arte del Gelato
           </span>
-          <h1 className="font-serif text-7xl md:text-8xl lg:text-[11rem] xl:text-[12vw] leading-[0.85] text-florenzi-text tracking-tighter font-medium">
+          <h1 className="font-serif text-[clamp(4rem,15vw,11rem)] leading-[0.85] text-florenzi-text tracking-tighter font-medium drop-shadow-xl">
             Gelato <br/>
             <span className="italic font-light sm:pl-16 xl:pl-32">Vero</span>
           </h1>
           
           <div className="mt-10 md:mt-16 flex flex-col items-start gap-8">
-            <p className="font-sans text-xs md:text-lg lg:text-2xl xl:text-4xl text-florenzi-text/70 max-w-xs md:max-w-xl lg:max-w-2xl xl:max-w-4xl leading-relaxed">
+            <p className="font-sans text-[clamp(1rem,2vw,1.5rem)] text-florenzi-text/80 max-w-xs md:max-w-xl lg:max-w-2xl leading-relaxed">
               Florenzi quem prova,volta!
             </p>
           </div>

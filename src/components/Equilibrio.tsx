@@ -9,10 +9,10 @@ export const Equilibrio = () => {
 
       <div className="relative w-full max-w-7xl mx-auto px-6 md:px-12 flex flex-col items-center">
         <div className="text-center max-w-2xl">
-          <span className="font-sans text-[10px] uppercase tracking-[0.4em] opacity-80 mb-6 inline-block">
+          <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.4em] opacity-80 mb-6 inline-block">
             Equilíbrio
           </span>
-          <h2 className="font-serif text-4xl md:text-6xl italic tracking-tight">
+          <h2 className="font-serif text-[clamp(2.5rem,6vw,4rem)] italic tracking-tight">
             Energia & Natureza
           </h2>
         </div>

@@ -166,7 +166,7 @@ export const LArte = () => {
         <span className="font-sans text-xs uppercase tracking-[0.3em] text-florenzi-text/50 mb-6">
           La Nostra Selezione
         </span>
-        <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-florenzi-text font-medium italic">
+        <h2 className="font-serif text-[clamp(2.5rem,6vw,4.5rem)] text-florenzi-text font-medium italic">
           Cardápio Editorial
         </h2>
       </div>
