@@ -85,32 +85,41 @@ export const Hero = ({ frameCount }: HeroProps) => {
 
     const renderFrame = (index: number) => {
       let img = images[index];
-      let currentIndex = index;
-      
-      while (!img && currentIndex >= 0) {
-        currentIndex--;
-        img = images[currentIndex];
+      if (!img) {
+        let left = index - 1;
+        let right = index + 1;
+        while (left >= 0 || right < images.length) {
+          if (left >= 0 && images[left]) {
+            img = images[left]!;
+            break;
+          }
+          if (right < images.length && images[right]) {
+            img = images[right]!;
+            break;
+          }
+          left--;
+          right++;
+        }
       }
-      
       if (!img) return;
       
       let scale = Math.max(rect.width / img.width, rect.height / img.height);
       const isPortrait = rect.width < rect.height;
-      
+
       if (isPortrait) {
-        // Applica zoom in de 20% na imagem em aparelhos verticais
-        // Isso resolve o problema visual de estar "muito pequeno" comparado ao texto
-        scale *= 1.25; 
-      }
-      
-      let x = (rect.width - (img.width * scale)) / 2;
-      
-      if (isPortrait || rect.width <= 1024) {
-        x = (rect.width - (img.width * scale)) * 0.95;
+        const ar = rect.height / rect.width;
+        const extra = ar > 2 ? 1.5 : 1.35;
+        scale *= extra;
       }
 
-      // Se a imagem sofreu zoom, a origin_y centralizará a porção cortada 
-      // removendo excesso identicamente no topo e rodapé.
+      const scaledW = img.width * scale;
+      let x = (rect.width - scaledW) * 0.5;
+      if (isPortrait || rect.width <= 1024) {
+        const focusX = 0.82;
+        const target = rect.width * 0.86;
+        x = target - focusX * img.width * scale;
+        x = Math.min(0, Math.max(rect.width - scaledW, x));
+      }
       const y = (rect.height - (img.height * scale)) / 2;
 
       context.clearRect(0, 0, canvas.width, canvas.height);
@@ -131,6 +140,7 @@ export const Hero = ({ frameCount }: HeroProps) => {
     };
     updateCanvasSize();
     window.addEventListener('resize', updateCanvasSize);
+    window.addEventListener('orientationchange', updateCanvasSize);
 
     const endValue = window.innerWidth < 768 ? "+=120%" : "+=180%";
     const tl = gsap.timeline({
@@ -163,6 +173,7 @@ export const Hero = ({ frameCount }: HeroProps) => {
 
     return () => {
       window.removeEventListener('resize', updateCanvasSize);
+      window.removeEventListener('orientationchange', updateCanvasSize);
       tl.kill();
     };
   }, [loaded, images, frameCount]);
@@ -176,6 +187,14 @@ export const Hero = ({ frameCount }: HeroProps) => {
             <span className="text-[10px] tracking-[0.5em] uppercase opacity-30 animate-pulse font-sans font-medium">...</span>
           </div>
         )}
+        <img 
+          src="/imagens/frame (1).webp" 
+          alt="" 
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover md:hidden"
+          loading="eager"
+          decoding="sync"
+        />
         <canvas ref={canvasRef} className="block absolute inset-0 z-0" />
       </div>
 
@@ -191,7 +210,7 @@ export const Hero = ({ frameCount }: HeroProps) => {
           <span className="block font-sans text-[10px] md:text-xs lg:text-sm uppercase tracking-[0.4em] font-medium text-florenzi-text/60 mb-6 md:mb-8 ml-1">
             L'Arte del Gelato
           </span>
-          <h1 className="font-serif text-[clamp(4rem,15vw,11rem)] leading-[0.85] text-florenzi-text tracking-tighter font-medium drop-shadow-xl">
+          <h1 className="font-serif text-[clamp(4.6rem,16vw,12rem)] leading-[0.85] text-florenzi-text tracking-tighter font-medium drop-shadow-xl">
             Gelato <br/>
             <span className="italic font-light sm:pl-16 xl:pl-32">Vero</span>
           </h1>
