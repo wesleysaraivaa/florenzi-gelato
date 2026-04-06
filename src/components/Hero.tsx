@@ -97,8 +97,12 @@ export const Hero = ({ frameCount }: HeroProps) => {
       const scale = Math.max(rect.width / img.width, rect.height / img.height);
       let x = (rect.width - (img.width * scale)) / 2;
       
-      if (rect.width < 768) {
-        x = (rect.width - (img.width * scale)) * 0.85;
+      const isPortrait = rect.width < rect.height;
+      if (isPortrait || rect.width <= 1024) {
+        // Na renderização original, o gelato fica à direita.
+        // Alinhando o X com * 1 garantimos que o copo inteiro toque a borda direita da tela,
+        // removendo a parte morta do centro que corta o objeto em viewports apertados.
+        x = (rect.width - (img.width * scale)) * 0.95;
       }
 
       const y = (rect.height - (img.height * scale)) / 2;

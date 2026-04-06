@@ -46,12 +46,12 @@ export const Navbar = () => {
 
   return (
     <div id="navigation-root">
-      {/* DESKTOP NAVBAR */}
+      {/* DESKTOP NAVBAR (Pill) */}
       <motion.nav
         initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.4, ease: 'easeOut' }}
-        className="hidden md:flex fixed top-6 left-1/2 -translate-x-1/2 z-50 justify-center"
+        className="hidden lg:flex fixed top-6 left-1/2 -translate-x-1/2 z-50 justify-center"
         role="navigation"
         aria-label="Navegação Desktop"
       >
@@ -92,16 +92,16 @@ export const Navbar = () => {
         </div>
       </motion.nav>
 
-      {/* MOBILE NAVBAR (Floating Header) */}
+      {/* MOBILE/TABLET NAVBAR (Floating Header) */}
       <motion.nav
         initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.4, ease: 'easeOut' }}
-        className="md:hidden fixed top-4 left-0 right-0 z-50 flex justify-center px-4"
+        className="lg:hidden fixed top-4 left-0 right-0 z-50 flex justify-center px-4"
         role="navigation"
         aria-label="Navegação Mobile"
       >
-        <div className="w-full max-w-sm flex items-center justify-between rounded-full border border-florenzi-text/15 bg-florenzi-bg/95 backdrop-blur-xl shadow-xl px-6 py-4 pointer-events-auto">
+        <div className="w-full max-w-sm md:max-w-md flex items-center justify-between rounded-full border border-florenzi-text/15 bg-florenzi-bg/95 backdrop-blur-xl shadow-xl px-6 py-4 pointer-events-auto">
           <span className="font-serif italic text-xl text-florenzi-text tracking-wider pt-0.5">
             Florenzi.
           </span>
@@ -117,7 +117,7 @@ export const Navbar = () => {
         </div>
       </motion.nav>
 
-      {/* MOBILE FULLSCREEN MENU */}
+      {/* MOBILE/TABLET FULLSCREEN MENU */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
@@ -125,7 +125,7 @@ export const Navbar = () => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.98, y: -10 }}
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="md:hidden fixed inset-0 z-40 bg-florenzi-bg/98 backdrop-blur-sm flex flex-col items-center justify-center pointer-events-auto"
+            className="lg:hidden fixed inset-0 z-40 bg-florenzi-bg/98 backdrop-blur-sm flex flex-col items-center justify-center pointer-events-auto"
           >
             <div className="flex flex-col items-center gap-10">
               {items.map((it, i) => (
