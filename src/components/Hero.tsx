@@ -115,8 +115,8 @@ export const Hero = ({ frameCount }: HeroProps) => {
       const scaledW = img.width * scale;
       let x = (rect.width - scaledW) * 0.5;
       if (isPortrait || rect.width <= 1024) {
-        const focusX = 0.82;
-        const target = rect.width * 0.86;
+        const focusX = 0.78;
+        const target = rect.width * 0.83;
         x = target - focusX * img.width * scale;
         x = Math.min(0, Math.max(rect.width - scaledW, x));
       }
