@@ -17,18 +17,22 @@ export const Hero = ({ frameCount }: HeroProps) => {
   const imagesRef = useRef<(HTMLImageElement | null)[]>(new Array(frameCount).fill(null));
   const [loaded, setLoaded] = useState(false);
   const [loadError, setLoadError] = useState(false);
+  // ref para checar dentro do timer sem criar dependência cíclica
+  const loadedRef = useRef(false);
 
   useEffect(() => {
     const CRITICAL_FRAMES = Math.min(15, frameCount);
     let criticalLoaded = 0;
     let mounted = true;
+    loadedRef.current = false;
     imagesRef.current = new Array(frameCount).fill(null);
 
     // Timeout de fallback: se os frames críticos não carregarem em 8s, mostra o site mesmo assim
     const fallbackTimer = setTimeout(() => {
-      if (mounted && !loaded) {
+      if (mounted && !loadedRef.current) {
         setLoadError(true);
         setLoaded(true);
+        loadedRef.current = true;
       }
     }, 8000);
 
@@ -43,6 +47,7 @@ export const Hero = ({ frameCount }: HeroProps) => {
           criticalLoaded++;
           if (criticalLoaded === CRITICAL_FRAMES) {
             clearTimeout(fallbackTimer);
+            loadedRef.current = true;
             setLoaded(true);
           }
         }
@@ -54,6 +59,7 @@ export const Hero = ({ frameCount }: HeroProps) => {
           criticalLoaded++;
           if (criticalLoaded === CRITICAL_FRAMES) {
             clearTimeout(fallbackTimer);
+            loadedRef.current = true;
             setLoaded(true);
           }
         }
@@ -201,7 +207,7 @@ export const Hero = ({ frameCount }: HeroProps) => {
   }, [loaded, frameCount]);
 
   return (
-    <section ref={containerRef} className="relative w-full h-[100vh] overflow-hidden bg-florenzi-bg flex items-center">
+    <section ref={containerRef} className="relative w-full h-screen overflow-hidden bg-florenzi-bg flex items-center">
       
       <div className="absolute inset-0 w-full h-full z-0 pointer-events-none overflow-hidden">
         {!loaded && !loadError && (

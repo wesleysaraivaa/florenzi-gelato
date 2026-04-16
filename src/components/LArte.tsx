@@ -1,6 +1,57 @@
 import { useState, useRef, type KeyboardEvent } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+// Chip com popover flutuante — usado só no desktop
+const FlavorChip = ({ flavor, index }: { flavor: { name: string; notes: string }; index: number }) => {
+  const [open, setOpen] = useState(false);
+  const chipRef = useRef<HTMLButtonElement>(null);
+
+  return (
+    <motion.div
+      className="relative"
+      initial={{ opacity: 0, scale: 0.92 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.3, delay: 0.04 + index * 0.05 }}
+    >
+      <button
+        ref={chipRef}
+        type="button"
+        onMouseEnter={() => setOpen(true)}
+        onMouseLeave={() => setOpen(false)}
+        onFocus={() => setOpen(true)}
+        onBlur={() => setOpen(false)}
+        className="group flex items-center gap-2.5 rounded-full border border-florenzi-text/15 bg-florenzi-bg/60 px-4 py-2.5 text-left transition-all duration-300 hover:border-florenzi-text/40 hover:bg-florenzi-text hover:text-florenzi-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-florenzi-text/30"
+        aria-expanded={open}
+      >
+        <span className="font-sans text-[9px] text-florenzi-text/30 group-hover:text-florenzi-accent/50 tabular-nums transition-colors">
+          {String(index + 1).padStart(2, '0')}
+        </span>
+        <span className="font-serif text-base text-florenzi-text group-hover:text-florenzi-accent group-hover:italic transition-all duration-300 whitespace-nowrap">
+          {flavor.name}
+        </span>
+      </button>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: 6, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 4, scale: 0.97 }}
+            transition={{ duration: 0.18, ease: 'easeOut' }}
+            role="tooltip"
+            className="absolute bottom-full left-0 mb-2.5 z-50 w-64 rounded-2xl border border-florenzi-text/12 bg-florenzi-text text-florenzi-accent shadow-2xl shadow-black/20 p-5 pointer-events-none"
+          >
+            <p className="font-serif text-lg italic mb-2 leading-tight">{flavor.name}</p>
+            <p className="font-sans text-[11px] opacity-60 leading-relaxed font-light">{flavor.notes}</p>
+            {/* seta */}
+            <div className="absolute -bottom-[5px] left-6 w-2.5 h-2.5 rotate-45 bg-florenzi-text border-r border-b border-florenzi-text/12" />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+};
+
 type Flavor = { name: string; notes: string };
 type Category = {
   id: string;
@@ -22,11 +73,11 @@ const menuCategories: Category[] = [
       { name: 'Pistacchio Puro', notes: 'Pistache 100% Bronte, notas terrosas e textura sedosa.' },
       { name: 'Fior di Latte', notes: 'Leite fresco da fazenda local e creme. Sabor limpo.' },
       { name: 'Nocciola Piemonte', notes: 'Avelãs puras tostadas lentamente.' },
-      { name: 'Cioccolato Belga', notes: 'Cacau 80% intenso e frutado.' }
-    ]
+      { name: 'Cioccolato Belga', notes: 'Cacau 80% intenso e frutado.' },
+    ],
   },
   {
-    id: 'açaí',
+    id: 'acai',
     name: 'Açaí Amazônico',
     origin: 'Pureza Selvagem',
     description: 'Açaí de altíssima concentração, batido sem xaropes para manter o dulçor e acidez original da fruta.',
@@ -34,11 +85,11 @@ const menuCategories: Category[] = [
     items: [
       { name: 'Açaí Puro', notes: 'Apenas a superfruta, batida com guaraná natural.' },
       { name: 'Açaí & Morango', notes: 'Mesclado com morangos frescos batidos na hora.' },
-      { name: 'Açaí & Banana', notes: 'Cremoso, denso, finalizado com flor de sal.' }
-    ]
+      { name: 'Açaí & Banana', notes: 'Cremoso, denso, finalizado com flor de sal.' },
+    ],
   },
   {
-    id: 'cafés',
+    id: 'cafes',
     name: 'Cafés Especiais',
     origin: 'Grãos Selecionados',
     description: 'Torra média a clara, destacando notas frutadas e corpo aveludado da nossa seleção mensal.',
@@ -46,8 +97,8 @@ const menuCategories: Category[] = [
     items: [
       { name: 'Espresso Naturale', notes: 'Tiro curto, crema espessa e notas de caramelo.' },
       { name: 'Latte Artigiano', notes: 'Leite vaporizado perfeitamente liso.' },
-      { name: 'Americano', notes: 'Espresso alongado suave com notas minerais.' }
-    ]
+      { name: 'Americano', notes: 'Espresso alongado suave com notas minerais.' },
+    ],
   },
   {
     id: 'cappuccino',
@@ -58,8 +109,8 @@ const menuCategories: Category[] = [
     items: [
       { name: 'Cappuccino Clássico', notes: '1/3 espresso, 1/3 leite, 1/3 crema rica e aveludada.' },
       { name: 'Cappuccino Avelã', notes: 'Com um toque da nossa própria nocciola tostada.' },
-      { name: 'Mocaccino Florenzi', notes: 'Infundido com chocolate belga fundido no vaporizador.' }
-    ]
+      { name: 'Mocaccino Florenzi', notes: 'Infundido com chocolate belga fundido no vaporizador.' },
+    ],
   },
   {
     id: 'chocolate',
@@ -70,8 +121,8 @@ const menuCategories: Category[] = [
     items: [
       { name: 'Europeu Clássico', notes: 'Extremamente grosso, com textura de veludo negro.' },
       { name: 'Spicy Aztec', notes: 'Toque de canela fina e especiarias sutis de inverno.' },
-      { name: 'Bianco Naturale', notes: 'Chocolate branco puro derretido lentamente no leite integral.' }
-    ]
+      { name: 'Bianco Naturale', notes: 'Chocolate branco puro derretido lentamente no leite integral.' },
+    ],
   },
   {
     id: 'croissant',
@@ -82,8 +133,8 @@ const menuCategories: Category[] = [
     items: [
       { name: 'Tradicional (Puro)', notes: 'Simplicidade crocante, alvéolos gigantes e dourados.' },
       { name: 'Recheio de Pistacchio', notes: 'Transbordando nosso creme artesanal de pistache.' },
-      { name: 'Amêndoas', notes: 'Coberto com lâminas rústicas e farto creme frangipane.' }
-    ]
+      { name: 'Amêndoas', notes: 'Coberto com lâminas rústicas e farto creme frangipane.' },
+    ],
   },
   {
     id: 'cuscuz',
@@ -94,8 +145,8 @@ const menuCategories: Category[] = [
     items: [
       { name: 'Na Manteiga da Terra', notes: 'Úmido, perfumado, raiz e banhado em manteiga dourada.' },
       { name: 'Com Carne de Sol', notes: 'Desfiada fininha, puxada na manteiga com cebola roxa.' },
-      { name: 'Com Queijo Coalho', notes: 'Maçaricado, crosta dourada envolta em queijo derretido.' }
-    ]
+      { name: 'Com Queijo Coalho', notes: 'Maçaricado, crosta dourada envolta em queijo derretido.' },
+    ],
   },
   {
     id: 'tapiocas',
@@ -106,8 +157,8 @@ const menuCategories: Category[] = [
     items: [
       { name: 'Marguerita Ceará', notes: 'Generoso queijo coalho, tomatinhos confit e manjericão fresco.' },
       { name: 'Carne e Nata', notes: 'A clássica carne de sol mergulhada gentilmente na nata fresca.' },
-      { name: 'Florenzi Doce', notes: 'Coco fresco ralado na hora com um fio de leite condensado artesanal.' }
-    ]
+      { name: 'Florenzi Doce', notes: 'Coco fresco ralado na hora com um fio de leite condensado artesanal.' },
+    ],
   },
   {
     id: 'milkshake',
@@ -119,266 +170,419 @@ const menuCategories: Category[] = [
       { name: 'Shake de Pistacchio', notes: 'O clássico mais pedido. Verde vibrante natural e incrivelmente denso.' },
       { name: 'Shake de Fior di Latte', notes: 'Puro, limpo, realçando as ricas proteínas do leite integral.' },
       { name: 'Shake Cioccolato Ouro', notes: 'Chocolate tão denso que quase serve como um mousse frio no canudo.' },
-      { name: 'Shake Nocciola', notes: 'Coroado com pedaços graúdos de praliné de avelãs trituradas.' }
-    ]
-  }
+      { name: 'Shake Nocciola', notes: 'Coroado com pedaços graúdos de praliné de avelãs trituradas.' },
+            { name: 'Shake Cioccolato Ouro', notes: 'Chocolate tão denso que quase serve como um mousse frio no canudo.' },
+      { name: 'Shake Nocciola', notes: 'Coroado com pedaços graúdos de praliné de avelãs trituradas.' },
+            { name: 'Shake Cioccolato Ouro', notes: 'Chocolate tão denso que quase serve como um mousse frio no canudo.' },
+      { name: 'Shake Nocciola', notes: 'Coroado com pedaços graúdos de praliné de avelãs trituradas.' },
+    ],
+  },
 ];
-
- 
 
 export const LArte = () => {
   const [activeTab, setActiveTab] = useState(menuCategories[0].id);
+  // mobile: null = grade de categorias, string = id do painel aberto
+  const [mobileOpen, setMobileOpen] = useState<string | null>(null);
   const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
 
-  const activeCategory = menuCategories.find(c => c.id === activeTab) || menuCategories[0];
+  const activeCategory = menuCategories.find(c => c.id === activeTab) ?? menuCategories[0];
+  const activeIndex = menuCategories.findIndex(c => c.id === activeTab);
+  const mobileCategory = mobileOpen ? (menuCategories.find(c => c.id === mobileOpen) ?? null) : null;
+  const mobileIndex = mobileOpen ? menuCategories.findIndex(c => c.id === mobileOpen) : -1;
 
-  const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+  const onKeyDown = (e: KeyboardEvent<HTMLElement>) => {
     const ids = menuCategories.map(c => c.id);
-    const currentIndex = ids.indexOf(activeTab);
+    const cur = ids.indexOf(activeTab);
     if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
       e.preventDefault();
-      const nextIndex = (currentIndex + 1) % ids.length;
-      const nextId = ids[nextIndex];
-      setActiveTab(nextId);
-      queueMicrotask(() => tabRefs.current[nextId]?.focus());
+      const next = ids[(cur + 1) % ids.length];
+      setActiveTab(next);
+      queueMicrotask(() => tabRefs.current[next]?.focus());
     } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
       e.preventDefault();
-      const prevIndex = (currentIndex - 1 + ids.length) % ids.length;
-      const prevId = ids[prevIndex];
-      setActiveTab(prevId);
-      queueMicrotask(() => tabRefs.current[prevId]?.focus());
+      const prev = ids[(cur - 1 + ids.length) % ids.length];
+      setActiveTab(prev);
+      queueMicrotask(() => tabRefs.current[prev]?.focus());
     } else if (e.key === 'Home') {
       e.preventDefault();
-      const firstId = ids[0];
-      setActiveTab(firstId);
-      queueMicrotask(() => tabRefs.current[firstId]?.focus());
+      setActiveTab(ids[0]);
+      queueMicrotask(() => tabRefs.current[ids[0]]?.focus());
     } else if (e.key === 'End') {
       e.preventDefault();
-      const lastId = ids[ids.length - 1];
-      setActiveTab(lastId);
-      queueMicrotask(() => tabRefs.current[lastId]?.focus());
+      const last = ids[ids.length - 1];
+      setActiveTab(last);
+      queueMicrotask(() => tabRefs.current[last]?.focus());
     }
   };
 
   return (
-    <section id="menu" className="py-24 md:py-32 w-full bg-florenzi-bg overflow-hidden relative min-h-screen flex flex-col justify-center">
-      <div className="flex flex-col items-center justify-center mb-16 z-10 relative px-6 text-center">
-        <span className="font-sans text-xs uppercase tracking-[0.3em] text-florenzi-text/50 mb-6">
-          La Nostra Selezione
-        </span>
-        <h2 className="font-serif text-[clamp(2.5rem,6vw,4.5rem)] text-florenzi-text font-medium italic">
-          Cardápio Editorial
-        </h2>
-      </div>
+    <section id="menu" className="w-full bg-florenzi-bg overflow-hidden relative">
 
-      <div className="w-full relative border-b border-florenzi-text/10 mb-16 md:hidden">
-        <div className="w-full max-w-7xl mx-auto">
-          <div
-            className="flex overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] pb-4 snap-x snap-mandatory px-6 md:px-12 lg:px-24"
-          >
-            <div
-              className="flex items-center gap-8 md:gap-12 w-max shrink-0"
-              role="tablist"
-              aria-orientation="horizontal"
-              aria-label="La Nostra Selezione"
-              onKeyDown={onKeyDown}
-            >
-              {menuCategories.map((cat) => (
-                <button
-                  key={cat.id}
-                  onClick={() => setActiveTab(cat.id)}
-                  className={`relative cursor-pointer snap-start font-sans text-xs md:text-sm uppercase tracking-[0.2em] whitespace-nowrap transition-all duration-500 py-2 shrink-0 ${
-                    activeTab === cat.id ? 'text-florenzi-text scale-105' : 'text-florenzi-text/30 hover:text-florenzi-text/60 hover:scale-105'
-                  }`}
-                  role="tab"
-                  aria-selected={activeTab === cat.id}
-                  aria-controls={`panel-${cat.id}`}
-                  id={`tab-mobile-${cat.id}`}
-                  ref={(el) => { tabRefs.current[cat.id] = el; }}
-                  tabIndex={activeTab === cat.id ? 0 : -1}
-                  type="button"
-                  title={cat.name}
-                >
-                  {cat.name}
-                  {activeTab === cat.id && (
-                    <motion.div
-                      layoutId="activeTabUnderline"
-                      className="absolute left-0 right-0 -bottom-[17px] h-px bg-florenzi-text z-20"
-                      initial={false}
-                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                    />
-                  )}
-                </button>
-              ))}
-              <div className="w-6 md:w-12 shrink-0"></div>
-            </div>
-          </div>
+      {/* CABEÇALHO */}
+      <div className="pt-24 md:pt-32 pb-12 px-6 md:px-16 lg:px-24 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+        <div>
+          <span className="font-sans text-[10px] uppercase tracking-[0.4em] text-florenzi-text/40 mb-4 block">
+            La Nostra Selezione
+          </span>
+          <h2 className="font-serif text-[clamp(2.8rem,6vw,5rem)] text-florenzi-text font-medium italic leading-none">
+            Cardápio
+          </h2>
         </div>
-        
-        <div className="absolute top-0 right-0 w-16 h-full bg-linear-to-l from-florenzi-bg to-transparent pointer-events-none xl:hidden" />
+        <p className="font-sans text-sm text-florenzi-text/50 max-w-xs leading-relaxed font-light">
+          {menuCategories.length} categorias · cada uma com sua própria identidade
+        </p>
       </div>
 
-      <div className="w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-24">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
-          <aside className="hidden md:flex md:col-span-3 flex-col sticky top-24 self-start">
-            <span className="font-sans text-[10px] uppercase tracking-[0.4em] text-florenzi-text/50 mb-6">
-              La Nostra Selezione
-            </span>
-            <div
-              className="flex flex-col gap-2"
-              role="tablist"
-              aria-orientation="vertical"
-              aria-label="La Nostra Selezione"
-              onKeyDown={onKeyDown}
+      {/* ══════════════════════════════
+          MOBILE  (<lg) — dois estágios
+      ══════════════════════════════ */}
+      <div className="lg:hidden">
+        <AnimatePresence mode="wait">
+
+          {/* ESTÁGIO 1 — grade 2×N de categorias */}
+          {!mobileOpen && (
+            <motion.div
+              key="mobile-grid"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.25 }}
+              className="px-5 pb-16 grid grid-cols-2 gap-3"
             >
-              {menuCategories.map((cat) => (
+              {menuCategories.map((cat, i) => (
+                <motion.button
+                  key={cat.id}
+                  initial={{ opacity: 0, y: 14 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: i * 0.035, ease: 'easeOut' }}
+                  onClick={() => setMobileOpen(cat.id)}
+                  type="button"
+                  className="group relative flex flex-col items-start justify-between rounded-2xl border border-florenzi-text/10 bg-florenzi-text/3 p-5 text-left active:scale-[0.97] transition-transform duration-150 overflow-hidden min-h-[160px]"
+                >
+                  {/* imagem fantasma de fundo */}
+                  <div className="absolute -right-3 -bottom-3 w-20 h-20 opacity-8 pointer-events-none">
+                    <img src={cat.image} alt="" aria-hidden className="w-full h-full object-contain" loading="lazy" decoding="async" />
+                  </div>
+                  <span className="font-sans text-[9px] text-florenzi-text/30 tabular-nums mb-2">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <img
+                    src={cat.image}
+                    alt=""
+                    aria-hidden
+                    className="w-11 h-11 object-contain mb-3"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <div className="flex-1">
+                    <p className="font-serif text-[1.05rem] text-florenzi-text leading-tight">{cat.name}</p>
+                    <p className="font-sans text-[9px] text-florenzi-text/40 uppercase tracking-[0.15em] mt-0.5">{cat.origin}</p>
+                  </div>
+                  <span className="mt-3 text-florenzi-text/25 text-sm">→</span>
+                </motion.button>
+              ))}
+            </motion.div>
+          )}
+
+          {/* ESTÁGIO 2 — painel da categoria selecionada */}
+          {mobileOpen && mobileCategory && (
+            <motion.div
+              key={`mobile-detail-${mobileOpen}`}
+              initial={{ opacity: 0, x: 28 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 28 }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              role="region"
+              aria-label={mobileCategory.name}
+            >
+              {/* barra superior: voltar + contador */}
+              <div className="px-5 py-4 border-b border-florenzi-text/10 flex items-center justify-between">
+                <button
+                  onClick={() => setMobileOpen(null)}
+                  type="button"
+                  aria-label="Voltar para categorias"
+                  className="flex items-center gap-2 text-florenzi-text/50 active:text-florenzi-text transition-colors"
+                >
+                  <span>←</span>
+                  <span className="font-sans text-[10px] uppercase tracking-[0.25em]">Cardápio</span>
+                </button>
+                <span className="font-sans text-[10px] text-florenzi-text/30 uppercase tracking-[0.2em]">
+                  {String(mobileIndex + 1).padStart(2, '0')} / {String(menuCategories.length).padStart(2, '0')}
+                </span>
+              </div>
+
+              {/* imagem + título lado a lado */}
+              <div className="relative flex items-center gap-5 px-6 pt-8 pb-7 overflow-hidden">
+                <div className="absolute inset-0 bg-radial-[at_80%_50%] from-florenzi-accent/20 to-transparent pointer-events-none" />
+                <div className="relative z-10 flex-1 min-w-0">
+                  <span className="font-sans text-[10px] uppercase tracking-[0.4em] text-florenzi-text/35 mb-2 block">
+                    {mobileCategory.origin}
+                  </span>
+                  <h3 className="font-serif text-[2rem] text-florenzi-text italic font-medium leading-[1.05] mb-3">
+                    {mobileCategory.name}
+                  </h3>
+                  <p className="font-sans text-xs text-florenzi-text/50 leading-relaxed font-light">
+                    {mobileCategory.description}
+                  </p>
+                </div>
+                <motion.img
+                  src={mobileCategory.image}
+                  alt={mobileCategory.name}
+                  loading="lazy"
+                  decoding="async"
+                  initial={{ scale: 0.82, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                  className="relative z-10 w-28 h-28 object-contain drop-shadow-xl shrink-0"
+                />
+              </div>
+
+              {/* lista de itens */}
+              <div className="px-5 pb-6 border-t border-florenzi-text/10">
+                <span className="font-sans text-[10px] uppercase tracking-[0.35em] text-florenzi-text/35 py-4 block">
+                  {mobileCategory.items.length} variações
+                </span>
+                <div role="list" aria-label={`Variações de ${mobileCategory.name}`} className="divide-y divide-florenzi-text/8">
+                  {mobileCategory.items.map((flavor, idx) => (
+                    <motion.div
+                      key={flavor.name}
+                      role="listitem"
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.28, delay: 0.04 + idx * 0.055 }}
+                      className="flex items-center justify-between gap-4 py-4"
+                    >
+                      <div className="flex items-baseline gap-4 min-w-0">
+                        <span className="font-sans text-[10px] text-florenzi-text/25 shrink-0 tabular-nums">
+                          {String(idx + 1).padStart(2, '0')}
+                        </span>
+                        <div className="min-w-0">
+                          <h4 className="font-serif text-lg text-florenzi-text">{flavor.name}</h4>
+                          <p className="mt-0.5 font-sans text-[11px] text-florenzi-text/45 leading-relaxed font-light">{flavor.notes}</p>
+                        </div>
+                      </div>
+                      <span className="shrink-0 text-florenzi-text/20 text-base">→</span>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+
+              {/* navegação anterior / próximo */}
+              <div className="px-5 pb-14 pt-4 flex items-center justify-between border-t border-florenzi-text/10">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const ids = menuCategories.map(c => c.id);
+                    setMobileOpen(ids[(mobileIndex - 1 + ids.length) % ids.length]);
+                  }}
+                  className="flex items-center gap-2 text-florenzi-text/40 active:text-florenzi-text transition-colors"
+                >
+                  <span>←</span>
+                  <span className="font-sans text-[10px] uppercase tracking-[0.2em]">Anterior</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const ids = menuCategories.map(c => c.id);
+                    setMobileOpen(ids[(mobileIndex + 1) % ids.length]);
+                  }}
+                  className="flex items-center gap-2 text-florenzi-text/40 active:text-florenzi-text transition-colors"
+                >
+                  <span className="font-sans text-[10px] uppercase tracking-[0.2em]">Próximo</span>
+                  <span>→</span>
+                </button>
+              </div>
+            </motion.div>
+          )}
+
+        </AnimatePresence>
+      </div>
+
+      {/* ══════════════════════════════
+          DESKTOP  (lg+)
+      ══════════════════════════════ */}
+      <div className="hidden lg:flex min-h-[80vh]">
+
+        {/* SIDEBAR */}
+        <aside
+          className="flex flex-col w-64 xl:w-72 shrink-0 border-r border-florenzi-text/10 sticky top-0 self-start h-screen overflow-y-auto pt-8 pb-16 px-6 xl:px-8"
+          aria-label="Categorias do cardápio"
+        >
+          <div
+            role="tablist"
+            aria-orientation="vertical"
+            aria-label="La Nostra Selezione"
+            onKeyDown={onKeyDown}
+            className="flex flex-col gap-1"
+          >
+            {menuCategories.map((cat, i) => {
+              const isActive = activeTab === cat.id;
+              return (
                 <button
                   key={cat.id}
                   onClick={() => setActiveTab(cat.id)}
-                  className={`flex items-center justify-between rounded-full px-5 py-3 text-left font-sans text-[11px] uppercase tracking-[0.2em] transition-all border ${
-                    activeTab === cat.id
-                      ? 'bg-florenzi-text/5 border-florenzi-text/20 text-florenzi-text'
-                      : 'bg-transparent border-florenzi-text/10 text-florenzi-text/50 hover:text-florenzi-text/80 hover:border-florenzi-text/20'
-                  }`}
                   role="tab"
-                  aria-selected={activeTab === cat.id}
+                  aria-selected={isActive}
                   aria-controls={`panel-${cat.id}`}
                   id={`tab-desktop-${cat.id}`}
-                  ref={(el) => { tabRefs.current[cat.id] = el; }}
-                  tabIndex={activeTab === cat.id ? 0 : -1}
+                  ref={el => { tabRefs.current[cat.id] = el; }}
+                  tabIndex={isActive ? 0 : -1}
                   type="button"
-                  title={cat.name}
+                  className={`group flex items-center gap-4 px-3 py-3.5 rounded-2xl text-left transition-all duration-300 ${
+                    isActive
+                      ? 'bg-florenzi-text text-florenzi-accent'
+                      : 'hover:bg-florenzi-text/5 text-florenzi-text/50 hover:text-florenzi-text'
+                  }`}
                 >
-                  <span className="flex items-center gap-3">
-                    <img
-                      src={cat.image}
-                      alt={cat.name}
-                      className="w-6 h-6 rounded-full object-contain object-center"
-                      loading="lazy"
-                      decoding="async"
-                    />
+                  <span className={`font-sans text-[10px] w-5 shrink-0 ${isActive ? 'opacity-60' : 'opacity-30'}`}>
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <img
+                    src={cat.image}
+                    alt=""
+                    aria-hidden="true"
+                    className={`w-7 h-7 rounded-full object-contain shrink-0 transition-opacity duration-300 ${isActive ? 'opacity-100' : 'opacity-40 group-hover:opacity-70'}`}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <span className="font-sans text-[11px] uppercase tracking-[0.15em] leading-tight">
                     {cat.name}
                   </span>
                 </button>
-              ))}
-            </div>
-          </aside>
+              );
+            })}
+          </div>
+        </aside>
 
-          <div className="md:col-span-9">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeCategory.id}
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -15 }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
-                role="tabpanel"
-                id={`panel-${activeCategory.id}`}
-                aria-labelledby={`tab-desktop-${activeCategory.id} tab-mobile-${activeCategory.id}`}
-              >
-                <div className="relative rounded-3xl border border-florenzi-text/10 bg-florenzi-text/5 overflow-hidden p-8 md:p-12">
-                  <div className="absolute -right-24 -top-24 w-96 h-96 rounded-full bg-florenzi-accent/30 blur-3xl opacity-30 pointer-events-none" />
-                  <svg viewBox="0 0 1000 300" className="absolute inset-x-0 top-1/2 -translate-y-1/2 opacity-30 pointer-events-none" aria-hidden>
-                    <motion.path
-                      d="M 40 220 C 200 60, 520 340, 920 140"
-                      fill="none"
-                      stroke="currentColor"
-                      className="text-florenzi-text/40"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      initial={{ pathLength: 0 }}
-                      animate={{ pathLength: 1 }}
-                      transition={{ duration: 1.4, ease: 'easeInOut' }}
-                      key={activeCategory.id}
-                    />
-                  </svg>
-                  <motion.div
-                    key={`ink-${activeCategory.id}`}
-                    initial={{ width: '0%' }}
-                    animate={{ width: ['0%', '100%', '0%'] }}
-                    transition={{ duration: 0.9, ease: 'easeInOut' }}
-                    className="absolute inset-y-0 left-0 bg-florenzi-accent/10 pointer-events-none"
-                  />
-                  <div className="grid grid-cols-1 md:grid-cols-12 items-center gap-10 md:gap-6">
-                    <div className="md:col-span-7">
-                      <span className="font-sans text-[10px] uppercase tracking-[0.4em] text-florenzi-text/40 mb-3 block">
+        {/* PAINEL DESKTOP */}
+        <div className="flex-1 min-w-0">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeCategory.id}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              role="tabpanel"
+              id={`panel-${activeCategory.id}`}
+              aria-labelledby={`tab-desktop-${activeCategory.id}`}
+            >
+              {/* hero */}
+              <div className="relative flex flex-row items-stretch border-b border-florenzi-text/10 overflow-hidden">
+                <div className="flex-1 px-12 lg:px-16 py-16 flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center gap-3 mb-8">
+                      <span className="font-sans text-[10px] uppercase tracking-[0.4em] text-florenzi-text/35">
+                        {String(activeIndex + 1).padStart(2, '0')}
+                      </span>
+                      <div className="h-px w-10 bg-florenzi-text/20" />
+                      <span className="font-sans text-[10px] uppercase tracking-[0.4em] text-florenzi-text/35">
                         {activeCategory.origin}
                       </span>
-                      <h3 className="font-serif text-3xl md:text-5xl text-florenzi-text mb-6 italic font-medium">
-                        {activeCategory.name}
-                      </h3>
-                      <p className="font-sans text-xs md:text-sm text-florenzi-text/60 leading-relaxed font-light max-w-xl">
-                        {activeCategory.description}
-                      </p>
                     </div>
-                    <div className="md:col-span-5 flex justify-center md:justify-end">
-                      <div className="w-56 h-56 md:w-72 md:h-72 relative">
-                        <motion.img 
-                          src={activeCategory.image} 
-                          alt={activeCategory.name}
-                          loading="lazy"
-                          decoding="async"
-                          sizes="(min-width: 1024px) 18rem, (min-width: 768px) 16rem, 14rem"
-                          initial={{ scale: 0.95, opacity: 0 }}
-                          animate={{ scale: 1, opacity: 1 }}
-                          transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
-                          className="w-full h-full object-contain object-center drop-shadow-2xl"
-                          style={{ clipPath: 'polygon(8% 0%, 100% 6%, 92% 100%, 0% 92%)' }}
-                        />
-                      </div>
-                    </div>
+                    <motion.h3
+                      initial={{ y: 18, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+                      className="font-serif text-[clamp(2.4rem,5vw,4.5rem)] text-florenzi-text italic font-medium leading-[1.05] mb-6"
+                    >
+                      {activeCategory.name}
+                    </motion.h3>
+                    <motion.p
+                      initial={{ y: 10, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      transition={{ duration: 0.55, delay: 0.08 }}
+                      className="font-sans text-sm text-florenzi-text/55 leading-relaxed font-light max-w-sm"
+                    >
+                      {activeCategory.description}
+                    </motion.p>
+                  </div>
+                  <div className="mt-10 flex items-center gap-2 text-florenzi-text/30">
+                    <span className="font-sans text-[10px] uppercase tracking-[0.3em]">
+                      {activeCategory.items.length} variações
+                    </span>
+                    <div className="h-px w-8 bg-florenzi-text/20" />
                   </div>
                 </div>
+                <div className="relative w-72 lg:w-80 xl:w-96 shrink-0 flex items-center justify-center bg-florenzi-text/3 border-l border-florenzi-text/10 overflow-hidden">
+                  <div className="absolute inset-0 bg-radial-[at_60%_40%] from-florenzi-accent/20 to-transparent pointer-events-none" />
+                  <motion.img
+                    key={activeCategory.id}
+                    src={activeCategory.image}
+                    alt={activeCategory.name}
+                    loading="lazy"
+                    decoding="async"
+                    initial={{ scale: 0.88, opacity: 0, rotate: -3 }}
+                    animate={{ scale: 1, opacity: 1, rotate: 0 }}
+                    transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+                    className="relative z-10 w-56 h-56 lg:w-64 lg:h-64 object-contain drop-shadow-2xl"
+                  />
+                </div>
+              </div>
 
-                <div className="mt-10">
-                  <span className="font-sans text-[10px] md:text-xs uppercase tracking-[0.4em] text-florenzi-text/40 mb-4 block">
-                    As Nossas Variações Oficiais
+              {/* chips de variações — compacto, sem crescer a seção */}
+              <div className="px-12 lg:px-16 py-10">
+                <span className="sr-only">Variações de {activeCategory.name}</span>
+                <div className="flex items-center gap-2 mb-6">
+                  <span className="font-sans text-[10px] uppercase tracking-[0.35em] text-florenzi-text/35">
+                    {activeCategory.items.length} variações
                   </span>
-                  <span className="sr-only">
-                    Variações oficiais para {activeCategory.name}
-                  </span>
-                  <div
-                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
-                    role="list"
-                    aria-label={`Variações de ${activeCategory.name}`}
-                  >
-                    {activeCategory.items.map((flavor, index) => (
-                      <motion.div 
-                        key={index}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.15 + (index * 0.07), ease: "easeOut" }}
-                        className="group flex flex-col justify-between cursor-pointer rounded-2xl border border-florenzi-text/10 bg-florenzi-bg/60 p-6 hover:border-florenzi-text/20 hover:bg-white/40 hover:shadow-2xl hover:shadow-florenzi-text/5 hover:-translate-y-1 hover:scale-[1.02] transition-all duration-500"
-                        role="listitem"
-                      >
-                        <div>
-                          <div className="flex items-start justify-between">
-                            <h4 className="font-serif text-2xl md:text-3xl text-florenzi-text group-hover:italic transition-all duration-500">
-                              {flavor.name}
-                            </h4>
-                          </div>
-                          <p className="mt-3 font-sans text-[10px] md:text-xs text-florenzi-text/50 uppercase tracking-widest font-light">
-                            {flavor.notes}
-                          </p>
-                        </div>
-                        
-                        <div className="mt-8 flex items-center justify-between border-t border-florenzi-text/5 pt-4 opacity-60 group-hover:opacity-100 transition-opacity duration-500">
-                          <span className="font-sans text-[9px] uppercase tracking-[0.3em] text-florenzi-text font-medium group-hover:text-florenzi-text transition-colors">
-                            Pedir Agora
-                          </span>
-                          <span className="text-florenzi-text/30 group-hover:text-florenzi-text group-hover:translate-x-1 transition-all duration-300">
-                            →
-                          </span>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
+                  <div className="h-px w-6 bg-florenzi-text/15" />
+                  <span className="font-sans text-[9px] text-florenzi-text/25 italic">passe o mouse para ver detalhes</span>
                 </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
+                <div
+                  role="list"
+                  aria-label={`Variações de ${activeCategory.name}`}
+                  className="flex flex-wrap gap-2.5"
+                >
+                  {activeCategory.items.map((flavor, idx) => (
+                    <div key={flavor.name} role="listitem">
+                      <FlavorChip flavor={flavor} index={idx} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
+
+      {/* RODAPÉ — só desktop */}
+      <div className="hidden lg:flex border-t border-florenzi-text/10 px-16 lg:px-24 py-10 items-center justify-between">
+        <div className="flex items-center gap-3 text-florenzi-text/30">
+          <span className="font-sans text-[10px] uppercase tracking-[0.3em]">
+            {String(activeIndex + 1).padStart(2, '0')} / {String(menuCategories.length).padStart(2, '0')}
+          </span>
+          <div className="w-24 h-px bg-florenzi-text/15 relative overflow-hidden rounded-full">
+            <motion.div
+              className="absolute inset-y-0 left-0 bg-florenzi-text/50 rounded-full"
+              animate={{ width: `${((activeIndex + 1) / menuCategories.length) * 100}%` }}
+              transition={{ duration: 0.4, ease: 'easeOut' }}
+            />
+          </div>
+        </div>
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={() => {
+              const ids = menuCategories.map(c => c.id);
+              setActiveTab(ids[(activeIndex - 1 + ids.length) % ids.length]);
+            }}
+            className="w-10 h-10 rounded-full border border-florenzi-text/15 flex items-center justify-center text-florenzi-text/50 hover:border-florenzi-text/40 hover:text-florenzi-text transition-all duration-300"
+            aria-label="Categoria anterior"
+          >←</button>
+          <button
+            type="button"
+            onClick={() => {
+              const ids = menuCategories.map(c => c.id);
+              setActiveTab(ids[(activeIndex + 1) % ids.length]);
+            }}
+            className="w-10 h-10 rounded-full border border-florenzi-text/15 flex items-center justify-center text-florenzi-text/50 hover:border-florenzi-text/40 hover:text-florenzi-text transition-all duration-300"
+            aria-label="Próxima categoria"
+          >→</button>
+        </div>
+      </div>
+
     </section>
   );
 };
