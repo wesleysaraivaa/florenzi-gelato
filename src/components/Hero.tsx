@@ -13,14 +13,24 @@ export const Hero = ({ frameCount }: HeroProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
-  const [images, setImages] = useState<(HTMLImageElement | null)[]>([]);
+  // useRef para o array de imagens — evita re-renders e padrão de mutação confuso
+  const imagesRef = useRef<(HTMLImageElement | null)[]>(new Array(frameCount).fill(null));
   const [loaded, setLoaded] = useState(false);
+  const [loadError, setLoadError] = useState(false);
 
   useEffect(() => {
     const CRITICAL_FRAMES = Math.min(15, frameCount);
     let criticalLoaded = 0;
     let mounted = true;
-    const imgArray: (HTMLImageElement | null)[] = new Array(frameCount).fill(null);
+    imagesRef.current = new Array(frameCount).fill(null);
+
+    // Timeout de fallback: se os frames críticos não carregarem em 8s, mostra o site mesmo assim
+    const fallbackTimer = setTimeout(() => {
+      if (mounted && !loaded) {
+        setLoadError(true);
+        setLoaded(true);
+      }
+    }, 8000);
 
     const loadFrame = (i: number) => {
       const img = new Image();
@@ -28,18 +38,24 @@ export const Hero = ({ frameCount }: HeroProps) => {
       img.src = `/imagens/frame (${i}).webp`;
       img.onload = () => {
         if (!mounted) return;
-        imgArray[i - 1] = img;
+        imagesRef.current[i - 1] = img;
         if (i <= CRITICAL_FRAMES) {
           criticalLoaded++;
-          if (criticalLoaded === CRITICAL_FRAMES) setLoaded(true);
+          if (criticalLoaded === CRITICAL_FRAMES) {
+            clearTimeout(fallbackTimer);
+            setLoaded(true);
+          }
         }
       };
       img.onerror = () => {
         if (!mounted) return;
-        imgArray[i - 1] = null;
+        imagesRef.current[i - 1] = null;
         if (i <= CRITICAL_FRAMES) {
           criticalLoaded++;
-          if (criticalLoaded === CRITICAL_FRAMES) setLoaded(true);
+          if (criticalLoaded === CRITICAL_FRAMES) {
+            clearTimeout(fallbackTimer);
+            setLoaded(true);
+          }
         }
       };
     };
@@ -64,10 +80,10 @@ export const Hero = ({ frameCount }: HeroProps) => {
     };
 
     scheduleRest();
-    setImages(imgArray);
 
     return () => {
       mounted = false;
+      clearTimeout(fallbackTimer);
     };
   }, [frameCount]);
 
@@ -78,6 +94,7 @@ export const Hero = ({ frameCount }: HeroProps) => {
     const context = canvas.getContext('2d');
     if (!context) return;
 
+    const images = imagesRef.current;
     const dpr = window.devicePixelRatio || 1;
     let rect = canvas.parentElement!.getBoundingClientRect();
 
@@ -107,20 +124,25 @@ export const Hero = ({ frameCount }: HeroProps) => {
       const isPortrait = rect.width < rect.height;
 
       if (isPortrait) {
-        const ar = rect.height / rect.width;
-        const extra = ar > 2 ? 1.5 : 1.35;
+        const extra = 1.0;
         scale *= extra;
       }
 
       const scaledW = img.width * scale;
       let x = (rect.width - scaledW) * 0.5;
       if (isPortrait || rect.width <= 1024) {
-        const focusX = 0.78;
-        const target = rect.width * 0.83;
+        const focusX = 0.73;
+        const target = rect.width * 0.77;
         x = target - focusX * img.width * scale;
         x = Math.min(0, Math.max(rect.width - scaledW, x));
       }
-      const y = (rect.height - (img.height * scale)) / 2;
+      let y = (rect.height - (img.height * scale)) / 2;
+      if (isPortrait) {
+        const focusY = 0.58;
+        const targetY = rect.height * 0.60;
+        y = targetY - focusY * img.height * scale;
+        y = Math.min(0, Math.max(rect.height - img.height * scale, y));
+      }
 
       context.clearRect(0, 0, canvas.width, canvas.height);
       context.imageSmoothingEnabled = true;
@@ -176,15 +198,26 @@ export const Hero = ({ frameCount }: HeroProps) => {
       window.removeEventListener('orientationchange', updateCanvasSize);
       tl.kill();
     };
-  }, [loaded, images, frameCount]);
+  }, [loaded, frameCount]);
 
   return (
     <section ref={containerRef} className="relative w-full h-[100vh] overflow-hidden bg-florenzi-bg flex items-center">
       
       <div className="absolute inset-0 w-full h-full z-0 pointer-events-none overflow-hidden">
-        {!loaded && (
+        {!loaded && !loadError && (
           <div className="absolute inset-0 flex items-center justify-center bg-florenzi-bg">
             <span className="text-[10px] tracking-[0.5em] uppercase opacity-30 animate-pulse font-sans font-medium">...</span>
+          </div>
+        )}
+        {loadError && (
+          <div className="absolute inset-0 flex items-center justify-center bg-florenzi-bg">
+            <img
+              src="/imagens/frame (1).webp"
+              alt=""
+              aria-hidden="true"
+              className="absolute inset-0 w-full h-full object-cover"
+              loading="eager"
+            />
           </div>
         )}
         <img 

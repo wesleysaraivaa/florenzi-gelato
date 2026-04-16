@@ -10,8 +10,9 @@ import { Equilibrio } from './components/Equilibrio';
 import { Experiencia } from './components/Experiencia';
 import { Footer } from './components/Footer';
 
+gsap.registerPlugin(ScrollTrigger);
+
 function App() {
-  gsap.registerPlugin(ScrollTrigger);
   const lenis = useLenis(() => {
     ScrollTrigger.update();
   });

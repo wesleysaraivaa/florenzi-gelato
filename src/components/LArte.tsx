@@ -193,7 +193,7 @@ export const LArte = () => {
                   role="tab"
                   aria-selected={activeTab === cat.id}
                   aria-controls={`panel-${cat.id}`}
-                  id={`tab-${cat.id}`}
+                  id={`tab-mobile-${cat.id}`}
                   ref={(el) => { tabRefs.current[cat.id] = el; }}
                   tabIndex={activeTab === cat.id ? 0 : -1}
                   type="button"
@@ -243,7 +243,7 @@ export const LArte = () => {
                   role="tab"
                   aria-selected={activeTab === cat.id}
                   aria-controls={`panel-${cat.id}`}
-                  id={`tab-${cat.id}`}
+                  id={`tab-desktop-${cat.id}`}
                   ref={(el) => { tabRefs.current[cat.id] = el; }}
                   tabIndex={activeTab === cat.id ? 0 : -1}
                   type="button"
@@ -274,7 +274,7 @@ export const LArte = () => {
                 transition={{ duration: 0.6, ease: "easeOut" }}
                 role="tabpanel"
                 id={`panel-${activeCategory.id}`}
-                aria-labelledby={`tab-${activeCategory.id}`}
+                aria-labelledby={`tab-desktop-${activeCategory.id} tab-mobile-${activeCategory.id}`}
               >
                 <div className="relative rounded-3xl border border-florenzi-text/10 bg-florenzi-text/5 overflow-hidden p-8 md:p-12">
                   <div className="absolute -right-24 -top-24 w-96 h-96 rounded-full bg-florenzi-accent/30 blur-3xl opacity-30 pointer-events-none" />
