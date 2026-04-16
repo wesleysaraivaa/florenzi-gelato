@@ -9,67 +9,64 @@ export const Experiencia = () => {
       id="experiencia"
       ref={sectionRef}
       className="relative w-full overflow-hidden"
-      style={{ aspectRatio: '3/2', maxHeight: '90vh' }}
+      style={{ height: 'min(100svh, 400px)' }}
     >
-      {/* ── FOTO — cobre 100% sem parallax ── */}
+      {/* FOTO */}
       <img
         src="/LOJA-FRENTE.jpg"
         alt="Interior da Florenzi Gelateria"
         loading="lazy"
-        className="absolute inset-0 w-full h-full object-cover object-[center_30%]"
+        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: '70% 30%' }}
       />
 
-      {/* ── GRADIENTE — escurece só a esquerda onde fica o texto ── */}
-      <div className="absolute inset-0 bg-linear-to-r from-black/80 via-black/40 to-black/5 pointer-events-none" />
+      {/* gradiente */}
+      <div className="absolute inset-0 bg-linear-to-r from-black/60 via-black/50 to-black/10 md:from-black/80 md:via-black/40 md:to-black/5 pointer-events-none" />
 
-      {/* ── CONTEÚDO ── */}
-      <div className="absolute inset-0 flex flex-col justify-end px-6 sm:px-10 md:px-16 lg:px-24 pb-16 md:pb-24">
+      {/* CONTEÚDO */}
+      <div className="absolute inset-0 flex flex-col justify-end px-6 md:px-16 lg:px-24 pb-12 md:pb-20">
 
-        {/* eyebrow */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className="flex items-center gap-3 mb-5 md:mb-7"
+          className="flex items-center gap-3 mb-4"
         >
-          <div className="w-8 md:w-12 h-px bg-white/50" />
-          <span className="font-sans text-[10px] md:text-xs uppercase tracking-[0.4em] text-white/70">
+          <div className="w-6 h-px bg-white/50" />
+          <span className="font-sans text-[9px] uppercase tracking-[0.35em] text-white/70">
             La Gelateria · Ubajara, CE
           </span>
         </motion.div>
 
-        {/* título */}
         <motion.h2
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          className="font-serif text-[clamp(2.8rem,7vw,6.5rem)] text-white leading-[0.95] tracking-tighter mb-6 md:mb-8 max-w-2xl drop-shadow-[0_4px_24px_rgba(0,0,0,0.5)]"
+          className="font-serif text-[clamp(2rem,7vw,6.5rem)] text-white leading-[0.95] tracking-tighter mb-5 drop-shadow-[0_4px_24px_rgba(0,0,0,0.6)]"
         >
           Um espaço<br />
-          <span className="italic font-light pl-8 md:pl-16">feito para</span><br />
+          <span className="italic font-light pl-5 md:pl-16">feito para</span><br />
           viver momentos.
         </motion.h2>
 
-        {/* linha divisória + subtexto + cta lado a lado */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.25, ease: 'easeOut' }}
-          className="flex flex-col sm:flex-row sm:items-end gap-6 sm:gap-12 max-w-2xl"
+          transition={{ duration: 0.8, delay: 0.25 }}
+          className="flex flex-col sm:flex-row sm:items-end gap-4 sm:gap-12"
         >
-          <p className="font-sans text-sm md:text-base text-white/70 font-light leading-relaxed max-w-xs">
+          <p className="font-sans text-xs md:text-base text-white/70 font-light leading-relaxed max-w-[240px] md:max-w-xs">
             Conforto, sabor e experiência em cada detalhe.
           </p>
 
           <a
             href="#"
-            className="group shrink-0 inline-flex items-center gap-3 rounded-full border border-white/30 bg-white/10 text-white px-7 py-3.5 font-sans text-[11px] uppercase tracking-[0.25em] transition-all duration-400 hover:bg-white hover:text-black hover:border-transparent hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+            className="self-start inline-flex items-center gap-3 rounded-full border border-white/30 bg-white/10 text-white px-6 py-3 font-sans text-[10px] uppercase tracking-[0.25em] transition-all duration-300 hover:bg-white hover:text-black hover:border-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
           >
             Como chegar
-            <span className="font-serif italic text-lg group-hover:translate-x-1 transition-transform duration-300">→</span>
+            <span className="font-serif italic text-base">→</span>
           </a>
         </motion.div>
 
