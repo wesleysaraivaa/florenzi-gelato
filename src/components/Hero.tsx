@@ -256,7 +256,7 @@ export const Hero = ({ frameCount }: HeroProps) => {
           
           <div className="mt-10 md:mt-16 flex flex-col items-start gap-8">
             <p className="font-sans text-[clamp(1rem,2vw,1.5rem)] text-florenzi-text/80 max-w-xs md:max-w-xl lg:max-w-2xl leading-relaxed">
-              Florenzi quem prova,volta!
+              Florenzi, quem prova, volta!
             </p>
           </div>
         </motion.div>

@@ -1,7 +1,24 @@
-import { useState, useRef, type KeyboardEvent } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useRef, type KeyboardEvent } from 'react';import { motion, AnimatePresence } from 'framer-motion';
 
-// Chip com popover flutuante — usado só no desktop
+// Imagem com skeleton de loading
+const LazyImg = ({ src, alt, className }: { src: string; alt: string; className?: string }) => {
+  const [ready, setReady] = useState(false);
+  return (
+    <div className="relative w-full h-full">
+      {!ready && (
+        <div className="absolute inset-0 rounded-2xl bg-florenzi-text/8 animate-pulse" />
+      )}
+      <img
+        src={src}
+        alt={alt}
+        loading="lazy"
+        decoding="async"
+        onLoad={() => setReady(true)}
+        className={`transition-opacity duration-500 ${ready ? 'opacity-100' : 'opacity-0'} ${className ?? ''}`}
+      />
+    </div>
+  );
+};
 const FlavorChip = ({ flavor, index }: { flavor: { name: string; notes: string }; index: number }) => {
   const [open, setOpen] = useState(false);
   const chipRef = useRef<HTMLButtonElement>(null);
@@ -273,8 +290,7 @@ export const LArte = () => {
                     className="w-11 h-11 object-contain mb-3"
                     loading="lazy"
                     decoding="async"
-                  />
-                  <div className="flex-1">
+                  />                  <div className="flex-1">
                     <p className="font-serif text-[1.05rem] text-florenzi-text leading-tight">{cat.name}</p>
                     <p className="font-sans text-[9px] text-florenzi-text/40 uppercase tracking-[0.15em] mt-0.5">{cat.origin}</p>
                   </div>
@@ -334,8 +350,7 @@ export const LArte = () => {
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
                   className="relative z-10 w-28 h-28 object-contain drop-shadow-xl shrink-0"
-                />
-              </div>
+                />              </div>
 
               {/* lista de itens */}
               <div className="px-5 pb-6 border-t border-florenzi-text/10">
@@ -506,17 +521,19 @@ export const LArte = () => {
                 </div>
                 <div className="relative w-72 lg:w-80 xl:w-96 shrink-0 flex items-center justify-center bg-florenzi-text/3 border-l border-florenzi-text/10 overflow-hidden">
                   <div className="absolute inset-0 bg-radial-[at_60%_40%] from-florenzi-accent/20 to-transparent pointer-events-none" />
-                  <motion.img
+                  <motion.div
                     key={activeCategory.id}
-                    src={activeCategory.image}
-                    alt={activeCategory.name}
-                    loading="lazy"
-                    decoding="async"
                     initial={{ scale: 0.88, opacity: 0, rotate: -3 }}
                     animate={{ scale: 1, opacity: 1, rotate: 0 }}
                     transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
-                    className="relative z-10 w-56 h-56 lg:w-64 lg:h-64 object-contain drop-shadow-2xl"
-                  />
+                    className="relative z-10 w-56 h-56 lg:w-64 lg:h-64"
+                  >
+                    <LazyImg
+                      src={activeCategory.image}
+                      alt={activeCategory.name}
+                      className="w-full h-full object-contain drop-shadow-2xl"
+                    />
+                  </motion.div>
                 </div>
               </div>
 
