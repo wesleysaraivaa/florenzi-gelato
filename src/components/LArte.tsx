@@ -401,11 +401,11 @@ export const LArte = () => {
       {/* ══════════════════════════════
           DESKTOP  (lg+)
       ══════════════════════════════ */}
-      <div className="hidden lg:flex min-h-[80vh]">
+      <div className="hidden lg:flex">
 
         {/* SIDEBAR */}
         <aside
-          className="flex flex-col w-64 xl:w-72 shrink-0 border-r border-florenzi-text/10 sticky top-0 self-start h-screen overflow-y-auto pt-8 pb-16 px-6 xl:px-8"
+          className="flex flex-col w-64 xl:w-72 shrink-0 border-r border-florenzi-text/10 sticky top-0 self-start max-h-screen overflow-y-auto pt-8 pb-16 px-6 xl:px-8"
           aria-label="Categorias do cardápio"
         >
           <div
@@ -521,7 +521,7 @@ export const LArte = () => {
               </div>
 
               {/* chips de variações — compacto, sem crescer a seção */}
-              <div className="px-12 lg:px-16 py-10">
+              <div className="px-12 lg:px-16 py-6">
                 <span className="sr-only">Variações de {activeCategory.name}</span>
                 <div className="flex items-center gap-2 mb-6">
                   <span className="font-sans text-[10px] uppercase tracking-[0.35em] text-florenzi-text/35">
@@ -548,7 +548,7 @@ export const LArte = () => {
       </div>
 
       {/* RODAPÉ — só desktop */}
-      <div className="hidden lg:flex border-t border-florenzi-text/10 px-16 lg:px-24 py-10 items-center justify-between">
+      <div className="hidden lg:flex border-t border-florenzi-text/10 px-16 lg:px-24 py-6 items-center justify-between">
         <div className="flex items-center gap-3 text-florenzi-text/30">
           <span className="font-sans text-[10px] uppercase tracking-[0.3em]">
             {String(activeIndex + 1).padStart(2, '0')} / {String(menuCategories.length).padStart(2, '0')}
