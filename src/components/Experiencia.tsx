@@ -9,8 +9,11 @@ export const Experiencia = () => {
       id="experiencia"
       ref={sectionRef}
       className="relative w-full overflow-hidden"
-      style={{ height: 'min(100svh, 400px)' }}
     >
+      <div
+        className="relative w-full overflow-hidden"
+        style={{ height: 'clamp(500px, 55vw, 75vh)' }}
+      >
       {/* FOTO */}
       <img
         src="/LOJA-FRENTE.jpg"
@@ -70,6 +73,7 @@ export const Experiencia = () => {
           </a>
         </motion.div>
 
+      </div>
       </div>
     </section>
   );
