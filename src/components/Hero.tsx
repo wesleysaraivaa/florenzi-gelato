@@ -39,7 +39,7 @@ export const Hero = ({ frameCount }: HeroProps) => {
     const loadFrame = (i: number) => {
       const img = new Image();
       img.decoding = 'async';
-      img.src = `/imagens/frame (${i}).webp`;
+      img.src = `/imagens/frame_${String(i).padStart(3, '0')}.webp`;
       img.onload = () => {
         if (!mounted) return;
         imagesRef.current[i - 1] = img;
@@ -218,7 +218,7 @@ export const Hero = ({ frameCount }: HeroProps) => {
         {loadError && (
           <div className="absolute inset-0 flex items-center justify-center bg-florenzi-bg">
             <img
-              src="/imagens/frame (1).webp"
+              src="/imagens/frame_001.webp"
               alt=""
               aria-hidden="true"
               className="absolute inset-0 w-full h-full object-cover"
@@ -227,7 +227,7 @@ export const Hero = ({ frameCount }: HeroProps) => {
           </div>
         )}
         <img 
-          src="/imagens/frame (1).webp" 
+          src="/imagens/frame_001.webp" 
           alt="" 
           aria-hidden="true"
           className="absolute inset-0 w-full h-full object-cover md:hidden"

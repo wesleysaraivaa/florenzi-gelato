@@ -50,7 +50,7 @@ function App() {
     <ReactLenis root options={{ lerp: 0.1, duration: 1.5, smoothWheel: true }}>
       <main id="inicio" className="bg-florenzi-bg min-h-screen text-florenzi-text selection:bg-florenzi-accent selection:text-white">
         <Navbar />
-        <Hero frameCount={63} />
+        <Hero frameCount={69} />
         <Equilibrio />
         <LArte />
         <Experiencia />
