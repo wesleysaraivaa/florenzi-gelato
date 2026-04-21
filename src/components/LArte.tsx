@@ -245,9 +245,6 @@ export const LArte = () => {
             Cardápio
           </h2>
         </div>
-        <p className="font-sans text-sm text-florenzi-text/50 max-w-xs leading-relaxed font-light">
-          {menuCategories.length} categorias · cada uma com sua própria identidade
-        </p>
       </div>
 
       {/* ══════════════════════════════
@@ -420,7 +417,7 @@ export const LArte = () => {
 
         {/* SIDEBAR */}
         <aside
-          className="flex flex-col w-64 xl:w-72 shrink-0 border-r border-florenzi-text/10 sticky top-0 self-start max-h-screen overflow-y-auto pt-8 pb-16 px-6 xl:px-8"
+          className="flex flex-col w-72 xl:w-80 2xl:w-96 shrink-0 border-r border-florenzi-text/10 sticky top-0 self-start max-h-screen overflow-y-auto pt-8 pb-16 px-6 xl:px-10"
           aria-label="Categorias do cardápio"
         >
           <div
@@ -443,7 +440,7 @@ export const LArte = () => {
                   ref={el => { tabRefs.current[cat.id] = el; }}
                   tabIndex={isActive ? 0 : -1}
                   type="button"
-                  className={`group flex items-center gap-4 px-3 py-3.5 rounded-2xl text-left transition-all duration-300 ${
+                  className={`group flex items-center gap-4 px-4 py-4 rounded-2xl text-left transition-all duration-300 ${
                     isActive
                       ? 'bg-florenzi-text text-florenzi-accent'
                       : 'hover:bg-florenzi-text/5 text-florenzi-text/50 hover:text-florenzi-text'
@@ -460,7 +457,7 @@ export const LArte = () => {
                     loading="lazy"
                     decoding="async"
                   />
-                  <span className="font-sans text-[11px] uppercase tracking-[0.15em] leading-tight">
+                  <span className="font-sans text-[11px] xl:text-xs uppercase tracking-[0.15em] leading-tight">
                     {cat.name}
                   </span>
                 </button>
@@ -484,7 +481,7 @@ export const LArte = () => {
             >
               {/* hero */}
               <div className="relative flex flex-row items-stretch border-b border-florenzi-text/10 overflow-hidden">
-                <div className="flex-1 px-12 lg:px-16 py-16 flex flex-col justify-between">
+                <div className="flex-1 min-w-0 max-w-2xl px-12 lg:px-16 xl:px-20 py-16 flex flex-col justify-between">
                   <div>
                     <div className="flex items-center gap-3 mb-8">
                       <span className="font-sans text-[10px] uppercase tracking-[0.4em] text-florenzi-text/35">
@@ -499,7 +496,7 @@ export const LArte = () => {
                       initial={{ y: 18, opacity: 0 }}
                       animate={{ y: 0, opacity: 1 }}
                       transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-                      className="font-serif text-[clamp(2.4rem,5vw,4.5rem)] text-florenzi-text italic font-medium leading-[1.05] mb-6"
+                      className="font-serif text-[clamp(2.4rem,4vw,5.5rem)] text-florenzi-text italic font-medium leading-[1.05] mb-6"
                     >
                       {activeCategory.name}
                     </motion.h3>
@@ -507,7 +504,7 @@ export const LArte = () => {
                       initial={{ y: 10, opacity: 0 }}
                       animate={{ y: 0, opacity: 1 }}
                       transition={{ duration: 0.55, delay: 0.08 }}
-                      className="font-sans text-sm text-florenzi-text/55 leading-relaxed font-light max-w-sm"
+                      className="font-sans text-sm xl:text-base text-florenzi-text/55 leading-relaxed font-light max-w-md"
                     >
                       {activeCategory.description}
                     </motion.p>
@@ -519,14 +516,14 @@ export const LArte = () => {
                     <div className="h-px w-8 bg-florenzi-text/20" />
                   </div>
                 </div>
-                <div className="relative w-72 lg:w-80 xl:w-96 shrink-0 flex items-center justify-center bg-florenzi-text/3 border-l border-florenzi-text/10 overflow-hidden">
+                <div className="relative w-72 lg:w-96 xl:w-md 2xl:w-lg shrink-0 flex items-center justify-center bg-florenzi-text/3 border-l border-florenzi-text/10 overflow-hidden">
                   <div className="absolute inset-0 bg-radial-[at_60%_40%] from-florenzi-accent/20 to-transparent pointer-events-none" />
                   <motion.div
                     key={activeCategory.id}
                     initial={{ scale: 0.88, opacity: 0, rotate: -3 }}
                     animate={{ scale: 1, opacity: 1, rotate: 0 }}
                     transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
-                    className="relative z-10 w-56 h-56 lg:w-64 lg:h-64"
+                    className="relative z-10 w-64 h-64 lg:w-72 lg:h-72 xl:w-80 xl:h-80"
                   >
                     <LazyImg
                       src={activeCategory.image}
@@ -538,7 +535,7 @@ export const LArte = () => {
               </div>
 
               {/* chips de variações — compacto, sem crescer a seção */}
-              <div className="px-12 lg:px-16 py-6">
+              <div className="px-12 lg:px-16 xl:px-20 py-6 xl:py-8">
                 <span className="sr-only">Variações de {activeCategory.name}</span>
                 <div className="flex items-center gap-2 mb-6">
                   <span className="font-sans text-[10px] uppercase tracking-[0.35em] text-florenzi-text/35">
