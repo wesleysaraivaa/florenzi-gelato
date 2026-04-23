@@ -48,14 +48,14 @@ export const Equilibrio = () => {
             role="listitem"
           >
             <div className="absolute inset-0 z-0 opacity-10 group-hover:opacity-20 transition-opacity duration-700 mix-blend-overlay">
-              <img src="/images/menu/cafes.png" alt="" className="w-full h-full object-cover scale-150 blur-2xl grayscale" />
+              <img src="/images/menu/cafes.webp" alt="" className="w-full h-full object-cover scale-150 blur-2xl grayscale" />
             </div>
             <div className="absolute inset-0 z-0 bg-linear-to-b from-florenzi-bg/5 to-transparent opacity-50" />
 
             <div className="relative z-10">
               <div className="flex items-center gap-4 mb-8">
                 <img
-                  src="/images/menu/cafes.png"
+                  src="/images/menu/cafes.webp"
                   alt="Cafés de Origem"
                   className="w-12 h-12 rounded-full object-cover object-center ring-1 ring-florenzi-accent/30 shadow-lg"
                   loading="lazy"
@@ -83,14 +83,14 @@ export const Equilibrio = () => {
             role="listitem"
           >
             <div className="absolute inset-0 z-0 opacity-10 group-hover:opacity-20 transition-opacity duration-700 mix-blend-overlay">
-              <img src="/images/menu/acai.png" alt="" className="w-full h-full object-cover scale-150 blur-2xl grayscale" />
+              <img src="/images/menu/acai.webp" alt="" className="w-full h-full object-cover scale-150 blur-2xl grayscale" />
             </div>
             <div className="absolute inset-0 z-0 bg-linear-to-b from-florenzi-bg/5 to-transparent opacity-50" />
 
             <div className="relative z-10">
               <div className="flex items-center gap-4 mb-8">
                 <img
-                  src="/images/menu/acai.png"
+                  src="/images/menu/acai.webp"
                   alt="Açaí Puro"
                   className="w-12 h-12 rounded-full object-cover object-center ring-1 ring-florenzi-accent/30 shadow-lg"
                   loading="lazy"

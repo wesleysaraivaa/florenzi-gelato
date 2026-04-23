@@ -1,13 +1,9 @@
-import { useRef } from 'react';
 import { motion } from 'framer-motion';
 
 export const Experiencia = () => {
-  const sectionRef = useRef<HTMLElement>(null);
-
   return (
     <section
       id="experiencia"
-      ref={sectionRef}
       className="relative w-full overflow-hidden"
     >
       <div
@@ -16,7 +12,7 @@ export const Experiencia = () => {
       >
       {/* FOTO */}
       <img
-        src="/LOJA-FRENTE.jpg"
+        src="/images/LOJA-FRENTE.jpg"
         alt="Interior da Florenzi Gelateria"
         loading="lazy"
         style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: '70% 30%' }}

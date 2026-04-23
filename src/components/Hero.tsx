@@ -39,7 +39,7 @@ export const Hero = ({ frameCount }: HeroProps) => {
     const loadFrame = (i: number) => {
       const img = new Image();
       img.decoding = 'async';
-      img.src = `/imagens/frame_${String(i).padStart(3, '0')}.webp`;
+      img.src = `/images/img-hero/frame_${String(i).padStart(3, '0')}.webp`;
       img.onload = () => {
         if (!mounted) return;
         imagesRef.current[i - 1] = img;
@@ -130,8 +130,7 @@ export const Hero = ({ frameCount }: HeroProps) => {
       const isPortrait = rect.width < rect.height;
 
       if (isPortrait) {
-        const extra = 1.0;
-        scale *= extra;
+        // scale já está correto para portrait
       }
 
       const scaledW = img.width * scale;
@@ -167,7 +166,14 @@ export const Hero = ({ frameCount }: HeroProps) => {
       renderFrame(Math.round(playhead.frame));
     };
     updateCanvasSize();
-    window.addEventListener('resize', updateCanvasSize);
+
+    // debounce no resize — evita reflow a cada pixel durante o redimensionamento
+    let resizeTimer: ReturnType<typeof setTimeout>;
+    const onResize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(updateCanvasSize, 100);
+    };
+    window.addEventListener('resize', onResize, { passive: true });
     window.addEventListener('orientationchange', updateCanvasSize);
 
     const endValue = window.innerWidth < 768 ? "+=120%" : "+=180%";
@@ -200,8 +206,9 @@ export const Hero = ({ frameCount }: HeroProps) => {
 
 
     return () => {
-      window.removeEventListener('resize', updateCanvasSize);
+      window.removeEventListener('resize', onResize);
       window.removeEventListener('orientationchange', updateCanvasSize);
+      clearTimeout(resizeTimer);
       tl.kill();
     };
   }, [loaded, frameCount]);
@@ -218,7 +225,7 @@ export const Hero = ({ frameCount }: HeroProps) => {
         {loadError && (
           <div className="absolute inset-0 flex items-center justify-center bg-florenzi-bg">
             <img
-              src="/imagens/frame_001.webp"
+              src="/images/img-hero/frame_001.webp"
               alt=""
               aria-hidden="true"
               className="absolute inset-0 w-full h-full object-cover"
@@ -227,12 +234,13 @@ export const Hero = ({ frameCount }: HeroProps) => {
           </div>
         )}
         <img 
-          src="/imagens/frame_001.webp" 
+          src="/images/img-hero/frame_001.webp" 
           alt="" 
           aria-hidden="true"
           className="absolute inset-0 w-full h-full object-cover md:hidden"
           loading="eager"
           decoding="sync"
+          fetchPriority="high"
         />
         <canvas ref={canvasRef} className="block absolute inset-0 z-0" />
       </div>

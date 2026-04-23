@@ -1,8 +1,9 @@
 @import "tailwindcss";
 
+
 @theme {
-  --font-sans: "Inter", "sans-serif";
-  --font-serif: "Playfair Display", "serif";
+  --font-sans: "Inter Variable", "Inter", sans-serif;
+  --font-serif: "Playfair Display", serif;
   --color-florenzi-bg: #AFCCBF;
   --color-florenzi-text: #1C2924;
   --color-florenzi-accent: #E5EFEA;

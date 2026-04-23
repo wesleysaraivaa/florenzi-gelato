@@ -1,4 +1,5 @@
-import { useState, useRef, type KeyboardEvent } from 'react';import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useRef, type KeyboardEvent } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // Imagem com skeleton de loading
 const LazyImg = ({ src, alt, className }: { src: string; alt: string; className?: string }) => {
@@ -21,7 +22,6 @@ const LazyImg = ({ src, alt, className }: { src: string; alt: string; className?
 };
 const FlavorChip = ({ flavor, index }: { flavor: { name: string; notes: string }; index: number }) => {
   const [open, setOpen] = useState(false);
-  const chipRef = useRef<HTMLButtonElement>(null);
 
   return (
     <motion.div
@@ -31,7 +31,6 @@ const FlavorChip = ({ flavor, index }: { flavor: { name: string; notes: string }
       transition={{ duration: 0.3, delay: 0.04 + index * 0.05 }}
     >
       <button
-        ref={chipRef}
         type="button"
         onMouseEnter={() => setOpen(true)}
         onMouseLeave={() => setOpen(false)}
@@ -85,7 +84,7 @@ const menuCategories: Category[] = [
     name: 'Gelato Artigianale',
     origin: 'Clássico Italiano',
     description: 'Nossa base de receita italiana, feita do zero com ingredientes em estado bruto. Sem pastas artificiais.',
-    image: '/images/menu/gelato.png',
+    image: '/images/menu/gelato.webp',
     items: [
       { name: 'Pistacchio Puro', notes: 'Pistache 100% Bronte, notas terrosas e textura sedosa.' },
       { name: 'Fior di Latte', notes: 'Leite fresco da fazenda local e creme. Sabor limpo.' },
@@ -98,7 +97,7 @@ const menuCategories: Category[] = [
     name: 'Açaí Amazônico',
     origin: 'Pureza Selvagem',
     description: 'Açaí de altíssima concentração, batido sem xaropes para manter o dulçor e acidez original da fruta.',
-    image: '/images/menu/acai.png',
+    image: '/images/menu/acai.webp',
     items: [
       { name: 'Açaí Puro', notes: 'Apenas a superfruta, batida com guaraná natural.' },
       { name: 'Açaí & Morango', notes: 'Mesclado com morangos frescos batidos na hora.' },
@@ -110,7 +109,7 @@ const menuCategories: Category[] = [
     name: 'Cafés Especiais',
     origin: 'Grãos Selecionados',
     description: 'Torra média a clara, destacando notas frutadas e corpo aveludado da nossa seleção mensal.',
-    image: '/images/menu/cafes.png',
+    image: '/images/menu/cafes.webp',
     items: [
       { name: 'Espresso Naturale', notes: 'Tiro curto, crema espessa e notas de caramelo.' },
       { name: 'Latte Artigiano', notes: 'Leite vaporizado perfeitamente liso.' },
@@ -122,7 +121,7 @@ const menuCategories: Category[] = [
     name: 'Cappuccino Cremoso',
     origin: 'A Arte do Leite',
     description: 'A proporção perfeita entre o amargor do café especial e a doçura natural da crema do leite de fazenda.',
-    image: '/images/menu/cappuccino.png',
+    image: '/images/menu/cappuccino.webp',
     items: [
       { name: 'Cappuccino Clássico', notes: '1/3 espresso, 1/3 leite, 1/3 crema rica e aveludada.' },
       { name: 'Cappuccino Avelã', notes: 'Com um toque da nossa própria nocciola tostada.' },
@@ -134,7 +133,7 @@ const menuCategories: Category[] = [
     name: 'Chocolate Quente',
     origin: 'Cacau Premium',
     description: 'Densidade absurda. Uma bebida feita para abraçar, cozida lentamente em pequenas batedeiras de cobre.',
-    image: '/images/menu/chocolate.png',
+    image: '/images/menu/chocolate.webp',
     items: [
       { name: 'Europeu Clássico', notes: 'Extremamente grosso, com textura de veludo negro.' },
       { name: 'Spicy Aztec', notes: 'Toque de canela fina e especiarias sutis de inverno.' },
@@ -146,7 +145,7 @@ const menuCategories: Category[] = [
     name: 'Croissant Duplo',
     origin: 'Lievito Madre',
     description: 'Massa folhada fermentada lentamente. Amanteigado no ponto exato para esfarelar na primeira mordida.',
-    image: '/images/menu/croissant.png',
+    image: '/images/menu/croissant.webp',
     items: [
       { name: 'Tradicional (Puro)', notes: 'Simplicidade crocante, alvéolos gigantes e dourados.' },
       { name: 'Recheio de Pistacchio', notes: 'Transbordando nosso creme artesanal de pistache.' },
@@ -158,7 +157,7 @@ const menuCategories: Category[] = [
     name: 'Cuscuz Raiz',
     origin: 'Tradição do Sertão',
     description: 'Milho hidratado na medida, soltinho e aromático, elevando a identidade afetuosa da nossa terra cearense.',
-    image: '/images/menu/cuscuz.png',
+    image: '/images/menu/cuscuz.webp',
     items: [
       { name: 'Na Manteiga da Terra', notes: 'Úmido, perfumado, raiz e banhado em manteiga dourada.' },
       { name: 'Com Carne de Sol', notes: 'Desfiada fininha, puxada na manteiga com cebola roxa.' },
@@ -170,7 +169,7 @@ const menuCategories: Category[] = [
     name: 'Tapiocas Finas',
     origin: 'Goma Fresca',
     description: 'Peneirada na hora da entrega, fina e leve. Recheios pensados para não esconderem o frescor originário da mandioca.',
-    image: '/images/menu/tapioca.png',
+    image: '/images/menu/tapioca.webp',
     items: [
       { name: 'Marguerita Ceará', notes: 'Generoso queijo coalho, tomatinhos confit e manjericão fresco.' },
       { name: 'Carne e Nata', notes: 'A clássica carne de sol mergulhada gentilmente na nata fresca.' },
@@ -182,15 +181,11 @@ const menuCategories: Category[] = [
     name: 'Milkshake',
     origin: 'Gelato Batido',
     description: 'Esqueça totalmente os xaropes sintéticos. Nosso milkshake é nosso próprio gelato artesanal batido com leite puro.',
-    image: '/images/menu/milkshake.png',
+    image: '/images/menu/milkshake.webp',
     items: [
       { name: 'Shake de Pistacchio', notes: 'O clássico mais pedido. Verde vibrante natural e incrivelmente denso.' },
       { name: 'Shake de Fior di Latte', notes: 'Puro, limpo, realçando as ricas proteínas do leite integral.' },
       { name: 'Shake Cioccolato Ouro', notes: 'Chocolate tão denso que quase serve como um mousse frio no canudo.' },
-      { name: 'Shake Nocciola', notes: 'Coroado com pedaços graúdos de praliné de avelãs trituradas.' },
-            { name: 'Shake Cioccolato Ouro', notes: 'Chocolate tão denso que quase serve como um mousse frio no canudo.' },
-      { name: 'Shake Nocciola', notes: 'Coroado com pedaços graúdos de praliné de avelãs trituradas.' },
-            { name: 'Shake Cioccolato Ouro', notes: 'Chocolate tão denso que quase serve como um mousse frio no canudo.' },
       { name: 'Shake Nocciola', notes: 'Coroado com pedaços graúdos de praliné de avelãs trituradas.' },
     ],
   },
