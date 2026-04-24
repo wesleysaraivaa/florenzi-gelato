@@ -45,7 +45,7 @@ export const Experiencia = () => {
           className="font-serif text-[clamp(2rem,7vw,6.5rem)] text-white leading-[0.95] tracking-tighter mb-5 drop-shadow-[0_4px_24px_rgba(0,0,0,0.6)]"
         >
           Um espaço<br />
-          <span className="italic font-light pl-5 md:pl-16">feito para</span><br />
+          <span className="italic font-light pl-5 ">feito para</span><br />
           viver momentos.
         </motion.h2>
 
